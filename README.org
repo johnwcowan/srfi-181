@@ -1,0 +1,18 @@
+* SRFI 181: Custom ports
+
+** by John Cowan
+
+This repository hosts [[https://srfi.schemers.org/srfi-181/][SRFI 181]]: Custom ports, a [[https://srfi.schemers.org/][Scheme Request for Implementation]].
+
+This SRFI is in /draft/ status.
+
+See also [[https://srfi.schemers.org/srfi-81/][SRFI 81: Port I/O]], [[https://srfi.schemers.org/srfi-82/][SRFI 82: Stream Ports]], and [[https://srfi.schemers.org/srfi-91/][SRFI 91: Extended ports]].
+
+The full documentation for this SRFI can be found in the [[https://srfi.schemers.org/srfi-181/srfi-181.html][SRFI Document]].
+
+If you'd like to participate in the discussion of this SRFI, or report issues with it, please [[https://srfi.schemers.org/srfi-181/][join the SRFI-181 mailing list]] and send your message there.
+
+Thank you.
+
+
+[[mailto:srfi-editors@srfi.schemers.org][The SRFI Editors]]
