@@ -78,8 +78,7 @@ an arbitrary algorithm represented by the <i>read!</i> procedure.
 <i>Id</i> is a string naming the new port,
 provided for informational purposes only.
 <i>Read!</i> is a procedure that behaves as specified
-below; it will be called by operations that perform binary input.</p>
-<p>
+below; it will be called by operations that perform binary input.
 Each of the remaining arguments may be <code>#f</code>; if any of
 those arguments is not <code>#f</code>, it is a procedure
 that behaves as specified below.</p>
@@ -123,14 +122,6 @@ The <i>close</i> procedure (if supplied) performs any actions
 that are necessary when the input port is closed.
 </p>
 </ul><p></p>
-<p>
-The implementation must not check the return
-values of <i>read!</i> and <i>get-position</i> except when it actually calls
-them as part of an I/O operation requested by the program.  The
-implementation is not required to check that these procedures
-otherwise behave as described.  If they do not, however, the behavior
-of the resulting port is unspecified.
-</p>
 <p></p>
 <p>
 </p>
@@ -142,72 +133,48 @@ an arbitrary algorithm represented by the <i>read!</i> procedure.
 <i>Id</i> is a string naming the new port,
 provided for informational purposes only.
 <i>Read!</i> is a procedure that behaves as specified
-below; it will be called by operations that perform textual input.</p>
-<p>
+below; it will be called by operations that perform textual input.
 Each of the remaining arguments may be <code>#f</code>; if any of
-those arguments is not <code>#f</code>, it is a procedure and
-that behaves as specified below.</p>
+those arguments is not <code>#f</code>, it is a procedure
+that behaves as specified in the description of
+<code>make-custom-binary-input-port</code>.</p>
 <p>
 </p>
 <ul>
-<li><p><code>(<i>read!</i> <i>string</i> <i>start</i> <i>count</i>)</code></p>
+<li><p><code>(<i>read!</i> <i>string-or-char-vector</i> <i>start</i> <i>count</i>)</code></p>
 <p>
 <i>Start</i> will be a non-negative exact integer,
 <i>count</i> will be a positive exact integer,
-and <i>string</i> will be a string whose length is at least
-<i>start</i>  +  <i>count</i>.
+and <i>string-or-char-vector</i> will be either a string
+or a vector containing characters, at the implementations's option.
+In either case its length is at least <i>start</i>  +  <i>count</i>.
 The <i>read!</i> procedure obtains up to <i>count</i> characters
 from the character source, and writes those characters
-into <i>string</i> starting at index <i>start</i>.
+into <i>string-or-char-vector</i> starting at index <i>start</i>;
+it must be prepared to receive either a string or a vector of characters.
 The <i>read!</i> procedure returns an exact integer
 representing the number of characters that it has written.
 To indicate an end of file, the <i>read!</i>
 procedure writes no bytes and returns 0.</p>
 <p>
 </p>
-<li><p><code>(<i>get-position</i>)</code></p>
-<p>
-The <i>get-position</i> procedure (if supplied) returns a single
-value.  The return value represents the current position of
-the input port.  If not supplied, the custom port will not support
-the <code>port-position</code> operation.</p>
-<p>
-</p>
-<li><p><code>(<i>set-position!</i> <i>pos</i>)</code></p>
-<p>
-The <i>set-position!</i> procedure (if supplied) sets the
-position of the input port to <i>pos</i> if <i>pos</i> is the return
-value of a call to <i>get-position</i>.  If not supplied, the custom
-port will not support the <code>set-port-position!</code> operation.</p>
-<p>
-</p>
-<li><p><code>(<i>close</i>)</code></p>
-<p>
-The <i>close</i> procedure (if supplied) performs any actions
-that are necessary when the input port is closed.
-</p>
 </ul><p></p>
-<p>
-The implementation must not check the return
-values of <i>read!</i> and <i>get-position</i> except when it actually calls
-them as part of an I/O operation requested by the program.  The
-implementation is not required to check that these procedures
-otherwise behave as described.  If they do not, however, the behavior
-of the resulting port is unspecified.
-</p>
 <div align=left><code>(make-custom-binary-output-port <i>id</i></code>
-<i>write!</i>&nbsp;<i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i>)</code></div><p>
+<i>write!</i>&nbsp;<i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i> [<i>flush</i>])</code></div><p>
 Returns a newly created binary output port whose byte sink is
 an arbitrary algorithm represented by the <i>write!</i> procedure.
 <i>Id</i> is a string naming the new port,
 provided for informational purposes only.
 <i>Write!</i> is a procedure that behaves as specified
-below; it will be called by operations that perform binary output.</p>
-<p>
-Each of the remaining arguments may be <code>#f</code>; if any of
+below; it will be called by operations that perform binary output.
+Each of the next three  arguments may be <code>#f</code>; if any of
 those arguments is not <code>#f</code>, it is a procedure and
 that behaves as specified in the description of
 <code>make-custom-binary-input-port</code>.</p>
+<p>
+The <i>flush</i> argument is optional.  If it is provided
+and not <code>#f</code>, it is a procedure to be called
+with no arguments when the new port is flushed.</p>
 <p>
 </p>
 <ul>
@@ -220,63 +187,65 @@ and <i>bytevector</i> will be a bytevector whose length is at least
 The <i>write!</i> procedure writes up to <i>count</i> bytes
 from <i>bytevector</i> starting at index <i>start</i> 
 to the byte sink.
-If <i>count</i> is 0, the <i>write!</i> procedure
-passes an end-of-file object (or equivalent) to the byte sink.
-In any case, the <i>write!</i> procedure returns the number of
+The <i>write!</i> procedure returns the number of
 bytes that it wrote, as an exact integer.
 </p>
 </ul><p></p>
-<p>
-The implementation must not check the return
-values of <i>write!</i> except when it actually calls <i>write!</i> as part of
-an I/O operation requested by the program.  The implementation is not
-required to check that <i>write!</i> otherwise behaves as described.
-If it does not, however, the behavior of the resulting port is
-unspecified.
-</p>
 <p></p>
 <p>
 </p>
 <p></p>
 <div align=left><code>(make-custom-textual-output-port <i>id</i></code>
-<i>write!</i>&nbsp;<i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i>)</code></div><p>
+<i>write!</i>&nbsp;<i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i> [<i>flush</i>])</code></div><p>
 Returns a newly created textual output port whose byte sink is
 an arbitrary algorithm represented by the <i>write!</i> procedure.
 <i>Id</i> is a string naming the new port,
 provided for informational purposes only.
 <i>Write!</i> is a procedure that behaves as specified
-below; it will be called by operations that perform textual output.</p>
-<p>
-Each of the remaining arguments may be <code>#f</code>; if any of
+below; it will be called by operations that perform textual output.
+Each of the next three arguments may be <code>#f</code>; if any of
 those arguments is not <code>#f</code>, it is a procedure and
 that behaves as specified in the description of
 <code>make-custom-textual-input-port</code>.</p>
+<p>The optional <i>flush</i> argument is processed
+as specified in the description of
+<code>make-custom-binary-output-port</code>.</p>
 <p>
 </p>
 <ul>
-<li><p><code>(<i>write!</i> <i>string</i> <i>start</i> <i>count</i>)</code></p>
+<li><p><code>(<i>write!</i> <i>string-or-char-vector</i> <i>start</i> <i>count</i>)</code></p>
 <p>
 <i>Start</i> and <i>count</i> will be non-negative exact
 integers,
-and <i>string</i> will be a string whose length is at least
-<i>start</i>  +  <i>count</i>.
+and <i>string-or-char-vector</i> will be either a string
+or a vector containing characters, at the implementations's option.
+In either case its length is at least <i>start</i>  +  <i>count</i>.
 The <i>write!</i> procedure writes up to <i>count</i> characters
-from <i>string</i> starting at index <i>start</i> 
+from <i>string-or-char-vector</i> starting at index <i>start</i> 
 to the character sink.
-If <i>count</i> is 0, the <i>write!</i> procedure
-passes an end-of-file object (or equivalent) to the character sink.
 In any case, the <i>write!</i> procedure returns the number of
 characters that it wrote, as an exact integer.
 </p>
 </ul><p></p>
-<p>
-The implementation must not check the return
-values of <i>write!</i> except when it actually calls <i>write!</i> as part of
-an I/O operation requested by the program.  The implementation is not
-required to check that <i>write!</i> otherwise behaves as described.
-If it does not, however, the behavior of the resulting port is
-unspecified.
-</p>
+<div align=left><code>(make-custom-binary-input/output-port <i>id</i> <i>read!</i> <i>write!</i></code>
+<i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i>)</code></div><p>
+Returns a newly created binary port that is both an input and an
+output port.  Its byte source and sink are arbitrary algorithms
+represented by the <i>read!</i> and <i>write!</i> procedures.
+Each of the arguments behaves as specified in the description of
+<code>make-custom-binary-input-port</code> or
+<code>make-custom-binary-output-port</code> as the case may be.</p>
+<p></p>
+<div align=left><code>(make-custom-textual-input/output-port <i>id</i> <i>read!</i> <i>write!</i></code>
+<i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i>)</code></div><p>
+Returns a newly created textual port that is both an input and an
+output port.  Its byte source and sink are arbitrary algorithms
+represented by the <i>read!</i> and <i>write!</i> procedures.
+Each of the arguments behaves as specified in the description of
+<code>make-custom-binary-input-port</code>,
+<code>make-custom-textual-input-port</code>, or
+<code>make-custom-textual-output-port</code> as the case may be.</p>
+<p></p>
 
 <h1>Implementation</h1>
 
@@ -285,6 +254,11 @@ Larceny, Racket, and Vicare, already provides these procedures
 in the <code>(rnrs io ports)</code> library.
 Therefore, no implementation is provided here, especially since 
 a portable implementation is not possible.</p>
+
+<p>However, strictly conforming R6RS implementations will not accept the
+<i>flush</i> argument, though a wrapper to accept and ignore it would be
+trivial.  Furthermore, the <i>read!</i> and <i>write!</i> procedures
+will never be passed a vector of characters, but always a string.</p>
 
 <p>This SRFI can trivially be implemented on top of the Chicken
 procedures <code>make-input-port</code> and <code>make-output-port</code>
@@ -301,7 +275,7 @@ is up to a higher-level library such as the <code>utf8</code> egg.
 This would have been much more difficult without the R6RS team,
 who produced a good-enough (as opposed to perfect) design
 that John was happy to adopt.  Thanks also to Mikel More,
-who convinced him of the necessity of having a design.
+who convinced him of the necessity of having custom ports in R7RS-large.
 
 <h1>Copyright</h1>
 John Cowan does not claim copyright on his <i>de minimis</i> contributions
