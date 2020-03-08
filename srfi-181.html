@@ -82,8 +82,6 @@ below; it will be called by operations that perform binary input.
 Each of the remaining arguments may be <code>#f</code>; if any of
 those arguments is not <code>#f</code>, it is a procedure
 that behaves as specified below.</p>
-<p>
-</p>
 <ul>
 <li><p><code>(<i>read!</i> <i>bytevector</i> <i>start</i> <i>count</i>)</code></p>
 <p>
@@ -98,34 +96,24 @@ The <i>read!</i> procedure returns an exact integer.  This
 integer represents the number of bytes that it has read.
 To indicate an end of file, the <i>read!</i>
 procedure writes no bytes and returns 0.</p>
-<p>
-</p>
 <li><p><code>(<i>get-position</i>)</code></p>
 <p>
 The <i>get-position</i> procedure (if supplied) returns an exact
 integer representing the current position of
 the input port.  If not supplied, the custom port will not support
 the <code>port-position</code> operation.</p>
-<p>
-</p>
 <li><p><code>(<i>set-position!</i> <i>pos</i>)</code></p>
 <p>
 <i>Pos</i> will be a non-negative exact integer.
 The <i>set-position!</i> procedure (if supplied) sets the
 position of the input port to <i>pos</i>.  If not supplied, the custom
 port will not support the <code>set-port-position!</code> operation.</p>
-<p>
-</p>
 <li><p><code>(<i>close</i>)</code></p>
 <p>
 The <i>close</i> procedure (if supplied) performs any actions
 that are necessary when the input port is closed.
 </p>
-</ul><p></p>
-<p></p>
-<p>
-</p>
-<p></p>
+</ul>
 <div align=left><code>(make-custom-textual-input-port <i>id</i> <i>read!</i></code>
 <i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i>)</code></div><p>
 Returns a newly created textual input port whose character source is
@@ -138,8 +126,6 @@ Each of the remaining arguments may be <code>#f</code>; if any of
 those arguments is not <code>#f</code>, it is a procedure
 that behaves as specified in the description of
 <code>make-custom-binary-input-port</code>.</p>
-<p>
-</p>
 <ul>
 <li><p><code>(<i>read!</i> <i>string-or-char-vector</i> <i>start</i> <i>count</i>)</code></p>
 <p>
@@ -156,9 +142,7 @@ The <i>read!</i> procedure returns an exact integer
 representing the number of characters that it has written.
 To indicate an end of file, the <i>read!</i>
 procedure writes no bytes and returns 0.</p>
-<p>
-</p>
-</ul><p></p>
+</ul>
 <div align=left><code>(make-custom-binary-output-port <i>id</i></code>
 <i>write!</i>&nbsp;<i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i> [<i>flush</i>])</code></div><p>
 Returns a newly created binary output port whose byte sink is
@@ -175,8 +159,6 @@ that behaves as specified in the description of
 The <i>flush</i> argument is optional.  If it is provided
 and not <code>#f</code>, it is a procedure to be called
 with no arguments when the new port is flushed.</p>
-<p>
-</p>
 <ul>
 <li><p><code>(<i>write!</i> <i>bytevector</i> <i>start</i> <i>count</i>)</code></p>
 <p>
@@ -190,11 +172,7 @@ to the byte sink.
 The <i>write!</i> procedure returns the number of
 bytes that it wrote, as an exact integer.
 </p>
-</ul><p></p>
-<p></p>
-<p>
-</p>
-<p></p>
+</ul>
 <div align=left><code>(make-custom-textual-output-port <i>id</i></code>
 <i>write!</i>&nbsp;<i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i> [<i>flush</i>])</code></div><p>
 Returns a newly created textual output port whose byte sink is
@@ -210,8 +188,6 @@ that behaves as specified in the description of
 <p>The optional <i>flush</i> argument is processed
 as specified in the description of
 <code>make-custom-binary-output-port</code>.</p>
-<p>
-</p>
 <ul>
 <li><p><code>(<i>write!</i> <i>string-or-char-vector</i> <i>start</i> <i>count</i>)</code></p>
 <p>
@@ -226,7 +202,7 @@ to the character sink.
 In any case, the <i>write!</i> procedure returns the number of
 characters that it wrote, as an exact integer.
 </p>
-</ul><p></p>
+</ul>
 <div align=left><code>(make-custom-binary-input/output-port <i>id</i> <i>read!</i> <i>write!</i></code>
 <i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i>)</code></div><p>
 Returns a newly created binary port that is both an input and an
@@ -235,7 +211,6 @@ represented by the <i>read!</i> and <i>write!</i> procedures.
 Each of the arguments behaves as specified in the description of
 <code>make-custom-binary-input-port</code> or
 <code>make-custom-binary-output-port</code> as the case may be.</p>
-<p></p>
 <div align=left><code>(make-custom-textual-input/output-port <i>id</i> <i>read!</i> <i>write!</i></code>
 <i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i>)</code></div><p>
 Returns a newly created textual port that is both an input and an
@@ -245,7 +220,6 @@ Each of the arguments behaves as specified in the description of
 <code>make-custom-binary-input-port</code>,
 <code>make-custom-textual-input-port</code>, or
 <code>make-custom-textual-output-port</code> as the case may be.</p>
-<p></p>
 
 <h1>Implementation</h1>
 
