@@ -72,7 +72,7 @@ which is the value of a parameter at the time of the read or write</li>
 
 <h1>Specification</h1>
 
-<div align=left><code>(make-custom-binary-input-port <i>id</i> <i>read!</i></code>
+<div align=left><code>(make-custom-binary-input-port </code><i>id</i> <i>read!</i>
 <i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i>)</code></div><p>
 Returns a newly created binary input port whose byte source is
 an arbitrary algorithm represented by the <i>read!</i> procedure.
@@ -84,7 +84,7 @@ Each of the remaining arguments may be <code>#f</code>; if any of
 those arguments is not <code>#f</code>, it is a procedure
 that behaves as specified below.</p>
 <ul>
-<li><p><code>(<i>read!</i> <i>bytevector</i> <i>start</i> <i>count</i>)</code></p>
+<li><p>(<i>read!</i> <i>bytevector</i> <i>start</i> <i>count</i>)</p>
 <p>
 <i>Start</i> will be a non-negative exact integer,
 <i>count</i> will be a positive exact integer,
@@ -97,25 +97,25 @@ The <i>read!</i> procedure returns an exact integer.  This
 integer represents the number of bytes that it has read.
 To indicate an end of file, the <i>read!</i>
 procedure writes no bytes and returns 0.</p>
-<li><p><code>(<i>get-position</i>)</code></p>
+<li><p>(<i>get-position</i>)</p>
 <p>
 The <i>get-position</i> procedure (if supplied) returns an exact
 integer representing the current position of
 the input port.  If not supplied, the custom port will not support
 the <code>port-position</code> operation.</p>
-<li><p><code>(<i>set-position!</i> <i>pos</i>)</code></p>
+<li><p>(<i>set-position!</i> <i>pos</i>)</p>
 <p>
 <i>Pos</i> will be a non-negative exact integer.
 The <i>set-position!</i> procedure (if supplied) sets the
 position of the input port to <i>pos</i>.  If not supplied, the custom
 port will not support the <code>set-port-position!</code> operation.</p>
-<li><p><code>(<i>close</i>)</code></p>
+<li><p>(<i>close</i>)</p>
 <p>
 The <i>close</i> procedure (if supplied) performs any actions
 that are necessary when the input port is closed.
 </p>
 </ul>
-<div align=left><code>(make-custom-textual-input-port <i>id</i> <i>read!</i></code>
+<div align=left><code>(make-custom-textual-input-port </code><i>id</i> <i>read!</i>
 <i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i>)</code></div><p>
 Returns a newly created textual input port whose character source is
 an arbitrary algorithm represented by the <i>read!</i> procedure.
@@ -128,7 +128,7 @@ those arguments is not <code>#f</code>, it is a procedure
 that behaves as specified in the description of
 <code>make-custom-binary-input-port</code>.</p>
 <ul>
-<li><p><code>(<i>read!</i> <i>string-or-char-vector</i> <i>start</i> <i>count</i>)</code></p>
+<li><p>(<i>read!</i> <i>string-or-char-vector</i> <i>start</i> <i>count</i>)</p>
 <p>
 <i>Start</i> will be a non-negative exact integer,
 <i>count</i> will be a positive exact integer,
@@ -144,7 +144,7 @@ representing the number of characters that it has written.
 To indicate an end of file, the <i>read!</i>
 procedure writes no bytes and returns 0.</p>
 </ul>
-<div align=left><code>(make-custom-binary-output-port <i>id</i></code>
+<div align=left><code>(make-custom-binary-output-port </code>id</i>
 <i>write!</i>&nbsp;<i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i> [<i>flush</i>])</code></div><p>
 Returns a newly created binary output port whose byte sink is
 an arbitrary algorithm represented by the <i>write!</i> procedure.
@@ -161,7 +161,7 @@ The <i>flush</i> argument is optional.  If it is provided
 and not <code>#f</code>, it is a procedure to be called
 with no arguments when the new port is flushed.</p>
 <ul>
-<li><p><code>(<i>write!</i> <i>bytevector</i> <i>start</i> <i>count</i>)</code></p>
+<li><p>(<i>write!</i> <i>bytevector</i> <i>start</i> <i>count</i>)</p>
 <p>
 <i>Start</i> and <i>count</i> will be non-negative exact
 integers,
@@ -174,7 +174,7 @@ The <i>write!</i> procedure returns the number of
 bytes that it wrote, as an exact integer.
 </p>
 </ul>
-<div align=left><code>(make-custom-textual-output-port <i>id</i></code>
+<div align=left><code>(make-custom-textual-output-port </code><i>id</i>
 <i>write!</i>&nbsp;<i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i> [<i>flush</i>])</code></div><p>
 Returns a newly created textual output port whose byte sink is
 an arbitrary algorithm represented by the <i>write!</i> procedure.
@@ -190,7 +190,7 @@ that behaves as specified in the description of
 as specified in the description of
 <code>make-custom-binary-output-port</code>.</p>
 <ul>
-<li><p><code>(<i>write!</i> <i>string-or-char-vector</i> <i>start</i> <i>count</i>)</code></p>
+<li><p>(<i>write!</i> <i>string-or-char-vector</i> <i>start</i> <i>count</i>)</p>
 <p>
 <i>Start</i> and <i>count</i> will be non-negative exact
 integers,
@@ -204,7 +204,7 @@ In any case, the <i>write!</i> procedure returns the number of
 characters that it wrote, as an exact integer.
 </p>
 </ul>
-<div align=left><code>(make-custom-binary-input/output-port <i>id</i> <i>read!</i> <i>write!</i></code>
+<div align=left><code>(make-custom-binary-input/output-port </code><i>id</i> <i>read!</i> <i>write!</i>
 <i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i>)</code></div><p>
 Returns a newly created binary port that is both an input and an
 output port.  Its byte source and sink are arbitrary algorithms
@@ -212,7 +212,7 @@ represented by the <i>read!</i> and <i>write!</i> procedures.
 Each of the arguments behaves as specified in the description of
 <code>make-custom-binary-input-port</code> or
 <code>make-custom-binary-output-port</code> as the case may be.</p>
-<div align=left><code>(make-custom-textual-input/output-port <i>id</i> <i>read!</i> <i>write!</i></code>
+<div align=left><code>(make-custom-textual-input/output-port </code><i>id</i> <i>read!</i> <i>write!</i>
 <i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i>)</code></div><p>
 Returns a newly created textual port that is both an input and an
 output port.  Its byte source and sink are arbitrary algorithms
