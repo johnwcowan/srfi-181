@@ -8,7 +8,7 @@ This repository hosts [[https://srfi.schemers.org/srfi-181/][SRFI 181]]: Custom 
 
 This SRFI is in /draft/ status.
 
-See also [[https://srfi.schemers.org/srfi-81/][SRFI 81: Port I/O]], [[https://srfi.schemers.org/srfi-82/][SRFI 82: Stream Ports]], and [[https://srfi.schemers.org/srfi-91/][SRFI 91: Extended ports]].
+See also [[https://srfi.schemers.org/srfi-79/][SRFI 79: Primitive I/O]], [[https://srfi.schemers.org/srfi-81/][SRFI 81: Port I/O]], [[https://srfi.schemers.org/srfi-82/][SRFI 82: Stream Ports]], and [[https://srfi.schemers.org/srfi-91/][SRFI 91: Extended ports]].
 
 The full documentation for this SRFI can be found in the [[https://srfi.schemers.org/srfi-181/srfi-181.html][SRFI Document]].
 
