@@ -30,11 +30,17 @@ The R6RS editors; John Cowan (shepherd)
 
 <h1>Abstract</h1>
 
-This is an extract from the R6RS that documents its support for custom ports.
-These provide a hook into the Scheme port system from below, allowing the
-creation of binary and textual ports that behave exactly like file, string,
-and bytevector ports, but whose basic operations are provided by user code.
-It has been lightly edited to fit R7RS style.
+<p>This SRFI is a lightly edited version of parts of
+<a href=http://www.r6rs.org/final/html/r6rs-lib/r6rs-lib-Z-H-9.html#node_sec_8.2.7>
+library section 8.2.7</a>,
+<a href=http://www.r6rs.org/final/html/r6rs-lib/r6rs-lib-Z-H-9.html#node_sec_8.2.10>
+library section 8.2.10</a>, and
+<a href=http://www.r6rs.org/final/html/r6rs-lib/r6rs-lib-Z-H-9.html#node_sec_8.2.13>
+library section 8.2.13</a>
+of the R6RS, documenting its support
+These sections are themselves based on parts of
+<a href="http://srfi.schemers.org/srfi-79/srfi-79.html">SRFI 79</a>.
+These procedures provide support for transcoders and transcoded ports.</p>
 
 <h1>Issues</h1>
 
@@ -96,7 +102,7 @@ into <i>bytevector</i> starting at index <i>start</i>.
 The <i>read!</i> procedure returns an exact integer.  This
 integer represents the number of bytes that it has read.
 To indicate an end of file, the <i>read!</i>
-procedure writes no bytes and returns 0.</p>
+procedure writes no bytes to its bytevector and returns 0.</p>
 <li><p>(<i>get-position</i>)</p>
 <p>
 The <i>get-position</i> procedure (if supplied) returns an exact
@@ -142,7 +148,7 @@ it must be prepared to receive either a string or a vector of characters.
 The <i>read!</i> procedure returns an exact integer
 representing the number of characters that it has written.
 To indicate an end of file, the <i>read!</i>
-procedure writes no bytes and returns 0.</p>
+procedure writes no bytes to the buffer and returns 0.</p>
 </ul>
 <div align=left><code>(make-custom-binary-output-port </code>id</i>
 <i>write!</i>&nbsp;<i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i> [<i>flush</i>])</code></div><p>
@@ -221,6 +227,10 @@ Each of the arguments behaves as specified in the description of
 <code>make-custom-binary-input-port</code>,
 <code>make-custom-textual-input-port</code>, or
 <code>make-custom-textual-output-port</code> as the case may be.</p>
+
+<blockquote>Note: The effect of the <code>char-ready?</code> and
+<code>u8-ready?</code> procedures on custom ports is undefined.
+</blockquote>
 
 <h1>Implementation</h1>
 
