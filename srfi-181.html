@@ -229,15 +229,23 @@ Each of the arguments behaves as specified in the description of
 <code>make-custom-textual-input-port</code>, or
 <code>make-custom-textual-output-port</code> as the case may be.</p>
 
+<div align=left><code>(make-file-error</code>&nbsp;<i>obj</i> ...)</code></div><p>
+Returns an object which satisfies the R7RS-small predicate
+<code>file-error?</code>.
+The effect of the <i>objs</i> is implementation-defined.
+Custom ports may raise the result of this procedure
+from their <i>open</i> procedures.</p>
 <blockquote>Note: The effect of the <code>char-ready?</code> and
-<code>u8-ready?</code> procedures on custom ports is undefined.
+<code>u8-ready?</code> procedures on custom ports is undefined.</p>
 </blockquote>
 
 <h1>Implementation</h1>
 
 <p>Every conforming R6RS implementation, including at least Chez, Guile, IronScheme,
 Larceny, Racket, and Vicare, already provides these procedures
-in the <code>(rnrs io ports)</code> library.
+in the <code>(rnrs io ports)</code> library, with the exception of the
+<code>file-error</code> procedure, which will already exist, though
+not necessarily be exposed, in most Schemes.
 Therefore, no implementation is provided here, especially since 
 a portable implementation is not possible.</p>
 
