@@ -219,15 +219,9 @@ represented by the <i>read!</i> and <i>write!</i> procedures.
 Each of the arguments behaves as specified in the description of
 <code>make-custom-binary-input-port</code> or
 <code>make-custom-binary-output-port</code> as the case may be.</p>
-<div align=left><code>(make-custom-textual-input/output-port </code><i>id</i> <i>read!</i> <i>write!</i>
-<i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i> [<i>flush</i>])</code></div><p>
-Returns a newly created textual port that is both an input and an
-output port.  Its byte source and sink are arbitrary algorithms
-represented by the <i>read!</i> and <i>write!</i> procedures.
-Each of the arguments behaves as specified in the description of
-<code>make-custom-binary-input-port</code>,
-<code>make-custom-textual-input-port</code>, or
-<code>make-custom-textual-output-port</code> as the case may be.</p>
+<p>Note: R6RS provides custom textual input/output ports, but
+they are difficult to implement and there are no clear use cases
+for them, so they have been removed from this SRFI.</p>
 
 <div align=left><code>(make-file-error</code>&nbsp;<i>obj</i> ...)</code></div><p>
 Returns an object which satisfies the R7RS-small predicate
@@ -244,7 +238,7 @@ from their <i>open</i> procedures.</p>
 <p>Every conforming R6RS implementation, including at least Chez, Guile, IronScheme,
 Larceny, Racket, and Vicare, already provides these procedures
 in the <code>(rnrs io ports)</code> library, with the exception of the
-<code>file-error</code> procedure, which will already exist, though
+<code>make-file-error</code> procedure, which will already exist, though
 not necessarily be exposed, in most Schemes.
 Therefore, no implementation is provided here, especially since 
 a portable implementation is not possible.</p>
