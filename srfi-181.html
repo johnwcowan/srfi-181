@@ -27,6 +27,7 @@ The R6RS editors; John Cowan (shepherd)
   <li>Draft #1 published: 2020-02-15</li>
   <li>Draft #2 published: 2020-02-08</li>
   <li>Draft #3 published: 2020-04-15</li>
+  <li>Draft #4 published: 2020-05-12</li>
 </ul>
 
 <h1>Abstract</h1>
@@ -232,9 +233,10 @@ represented by the <i>read!</i> and <i>write!</i> procedures.
 Each of the arguments behaves as specified in the description of
 <code>make-custom-binary-input-port</code> or
 <code>make-custom-binary-output-port</code> as the case may be.</p>
-<p>Note: R6RS provides custom textual input/output ports, but
-they are difficult to implement and there are no clear use cases
-for them, so they have been removed from this SRFI.</p>
+<p>Note: R6RS provides custom textual input/output ports (i.e. textual
+ports that support both input and output), but they are difficult to
+implement and there are no clear use cases for them, so they have been
+removed from this SRFI.</p>
 
 <div align=left><code>(make-file-error</code>&nbsp;<i>obj</i> ...)</code></div><p>
 Returns an object which satisfies the R7RS-small predicate
