@@ -287,13 +287,13 @@ an U+000A followed by a U+000D (a CRLF sequence).
 Implementations may support other line endings as well.</p>
 <p>
 The end-of-line style symbol <code>none</code>
-means that no conversion is performed in either direction.
+means that no line ending conversion is performed in either direction.
 On an input port, any other symbol will convert
-any newline sequence into a <code>#\newline</code> character.
+any line ending into a <code>#\newline</code> character.
 On an output port, the symbol <code>crlf</code> causes
-any <code>#\newline</code> to be output as a CRLF sequence,
+any line ending to be output as a CRLF sequence,
 but the symbol <code>lf</code> causes
-any newline sequence to be output
+any line ending to be output
 as a <code>#\newline</code> character,
 All other characters remain unchanged.
 Implementations may support additional symbols.</p>
