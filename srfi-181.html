@@ -16,7 +16,7 @@ Custom ports (including transcoded ports)
 
 <h1>Authors</h1>
 
-The R6RS editors; John Cowan (shepherd); Shiro Kawai (implementation)
+The R6RS editors; John Cowan (shepherd)
 
 <h1>Status</h1>
 
@@ -474,8 +474,8 @@ distinguish between textual and binary ports (as permitted by R7RS), and its str
 can store binary data; indeed, interpretation as characters
 is up to a higher-level library such as the <code>utf8</code> egg.
 
-<p>Shiro Kawai has provided a sample implementation that illustates
-both SRFI 181 and SRFI 192.  It can be found in the <a
+<p>Shiro Kawai has provided a sample implementation that illustrates
+both transcoded ports and SRFI 192.  It can be found in the <a
 href="https://github.com/scheme-requests-for-implementation/srfi-192">Git
 repository</a> for SRFI 192 and in <a
 href="https://srfi.schemers.org/srfi-192/srfi-192.tgz">this .tgz
@@ -483,7 +483,7 @@ archive</a>.</p>
 
 <h1>Acknowledgements</h1>
 
-This would have been much more difficult without the R6RS team,
+This SRFI would have been much more difficult to write without the R6RS team,
 who produced a good-enough (as opposed to perfect) design
 that John was happy to adopt.  Thanks also to Mikel More,
 who convinced him of the necessity of having custom and transcoded ports in R7RS-large.
