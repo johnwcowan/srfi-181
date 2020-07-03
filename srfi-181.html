@@ -1,24 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8">
     <title>SRFI 181: Custom ports (including transcoded ports)</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="/srfi.css" type="text/css" />
-    <link href="/favicon.png" rel="icon" sizes="192x192" type="image/png" />
+    <link href="/favicon.png" rel="icon" sizes="192x192" type="image/png">
+    <link rel="stylesheet" href="/srfi.css" type="text/css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
 
   <body>
+    <h1><a href="https://srfi.schemers.org/"><img class="srfi-logo" src="https://srfi.schemers.org/srfi-logo.svg" alt="SRFI logo" /></a>181: Custom ports (including transcoded ports)</h1>
 
-<h1>Title</h1>
+<p>by the R6RS editors; John Cowan (shepherd)</p>
 
-Custom ports (including transcoded ports)
-
-<h1>Authors</h1>
-
-The R6RS editors; John Cowan (shepherd)
-
-<h1>Status</h1>
+<h2>Status</h2>
 
 <p>This SRFI is currently in <em>draft</em> status.  Here is <a href="https://srfi.schemers.org/srfi-process.html">an explanation</a> of each status that a SRFI can hold.  To provide input on this SRFI, please send email to <code><a href="mailto:srfi+minus+181+at+srfi+dotschemers+dot+org">srfi-181@<span class="antispam">nospam</span>srfi.schemers.org</a></code>.  To subscribe to the list, follow <a href="https://srfi.schemers.org/srfi-list-subscribe.html">these instructions</a>.  You can access previous messages via the mailing list <a href="https://srfi-email.schemers.org/srfi-181">archive</a>.</p>
 <ul>
@@ -32,7 +27,7 @@ The R6RS editors; John Cowan (shepherd)
   <li>Draft #6 published: 2020-07-02</li>
 </ul>
 
-<h1>Abstract</h1>
+<h2>Abstract</h2>
 
 <p>This SRFI is a lightly edited version of parts of
 <a href="http://www.r6rs.org/final/html/r6rs-lib/r6rs-lib-Z-H-1.html#node_toc_node_sec_8.2.4">
@@ -57,11 +52,11 @@ between bytes and characters are an important special
 case and are also documented in this SRFI.
 </p>
 
-<h1>Issues</h1>
+<h2>Issues</h2>
 
 None at present.
 
-<h1>Rationale</h1>
+<h2>Rationale</h2>
 
 <p>When reading from (or writing to) files, devices, pipes, sockets,
 or other sources (or sinks) of data, it's often useful or necessary
@@ -98,12 +93,12 @@ This SRFI provides comprehensive facilities for handling
 many different encodings by creating a custom textual port on top of a binary port.
 </p>
 
-<h1>Specification</h1>
+<h2>Specification</h2>
 
 <p>Note: The effect of <code>char-ready?</code> and <code>u8-ready?</code>
 on custom ports is unspecified.</p>
 
-<h2>Custom ports in general</h2>
+<h3>Custom ports in general</h3>
 
 <p>The types of the arguments to the procedures of this section of this SRFI
 are as follows:</p>
@@ -263,9 +258,9 @@ The use of the <i>objs</i> is implementation-defined.
 Custom ports may raise the result of this procedure
 from their <i>open</i> procedures.</p>
 
-<h2>Transcoded ports</h2>
+<h3>Transcoded ports</h3>
 
-<h3>Codecs</h3>
+<h4>Codecs</h4>
 <p>
 Several different character encoding schemes exist that describe standard ways to
 encode characters and strings as byte sequences and to decode those
@@ -276,7 +271,7 @@ A codec has one or more names, represented as strings,
 and whatever other properties it
 requires in order to implement specific rules for
 encoding and decoding.</p>
-<h3>End-of-line styles</h3>
+<h4>End-of-line styles</h4>
 <p>
 An <em>end-of-line style</em> is a symbol that
 describes how a textual port transcodes representations of
@@ -299,7 +294,7 @@ any line ending to be output
 as a <code>#\newline</code> character,
 All other characters remain unchanged.
 Implementations may support additional symbols.</p>
-<h3>Error-handling modes</h3>
+<h4>Error-handling modes</h4>
 <p>
 An <em>error-handling mode</em> is a symbol that
 specifies the behavior
@@ -330,7 +325,7 @@ and encoding continues with the next character.
 </p>
 <p>
 Implementations may support additional symbols.</p>
-<h3>Transcoders</h3>
+<h4>Transcoders</h4>
 <p>
 A <em>transcoder</em> is an immutable Scheme object that combines
 a codec, an end-of-line style, and an error-handling mode.
@@ -341,7 +336,7 @@ allowed by the implementation.
 Every transcoder can decode bytes as characters
 and encode characters as bytes.
 </p>
-<h3>Procedures</h3>
+<h4>Procedures</h4>
 <div><code>(make-codec <i>string</i>)</code></div>
 <p>Returns a codec representing
 the character encoding scheme one of whose
@@ -448,7 +443,7 @@ Returns the bytevector that results from encoding the
 <p>
 </p>
 
-<h1>Implementation</h1>
+<h2>Implementation</h2>
 
 <p>Every conforming R6RS implementation, including at least Chez, IronScheme,
 Larceny, Racket, and Vicare, already provides these procedures
@@ -481,14 +476,14 @@ repository</a> for SRFI 192 and in <a
 href="https://srfi.schemers.org/srfi-192/srfi-192.tgz">this .tgz
 archive</a>.</p>
 
-<h1>Acknowledgements</h1>
+<h2>Acknowledgements</h2>
 
 This SRFI would have been much more difficult to write without the R6RS team,
 who produced a good-enough (as opposed to perfect) design
 that John was happy to adopt.  Thanks also to Mikel More,
 who convinced him of the necessity of having custom and transcoded ports in R7RS-large.
 
-<h1>Copyright</h1>
+<h2>Copyright</h2>
 <p>John Cowan does not claim copyright on his <i>de minimis</i> contributions
 to this SRFI.  Its content is drawn almost entirely from R6RS,
 which does not have a copyright notice.
