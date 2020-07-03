@@ -172,7 +172,7 @@ procedure writes no bytes to the buffer and returns 0.</p></li>
 <p>
 The <i>get-position</i> procedure returns an
 implementation-defined object representing the current position of
-the input port. 
+the input port.
 <li><p>(<i>set-position!</i> <i>pos</i>)</p>
 <p>
 It is an error if <i>pos</i> does not belong to the correct
@@ -193,7 +193,7 @@ integers,
 and <i>bytevector</i> is a bytevector whose length is at least
 <i>start</i>  +  <i>count</i>.
 <p>The <i>write!</i> procedure writes up to <i>count</i> bytes
-from <i>bytevector</i> starting at index <i>start</i> 
+from <i>bytevector</i> starting at index <i>start</i>
 to the byte sink.
 The <i>write!</i> procedure returns the number of
 bytes that it wrote, as an exact integer.
@@ -222,7 +222,7 @@ and <i>string-or-char-vector</i> is either a string
 or a vector containing characters, at the implementations's option.
 In either case its length is at least <i>start</i>  +  <i>count</i>.
 <p>The <i>write!</i> procedure writes up to <i>count</i> characters
-from <i>string-or-char-vector</i> starting at index <i>start</i> 
+from <i>string-or-char-vector</i> starting at index <i>start</i>
 to the character sink.
 In any case, the <i>write!</i> procedure returns the number of
 characters that it wrote, as an exact integer.
@@ -451,7 +451,7 @@ in the <code>(rnrs io ports)</code> library, with the exceptions
 of <code>make-file-error</code>, which will already exist though
 not necessarily be exposed,
 and of <code>make-codec</code>.
-Therefore, no implementation is provided here, especially since 
+Therefore, no implementation is provided here, especially since
 a portable implementation is not possible.</p>
 
 <p>However, strictly conforming R6RS implementations will not accept the
