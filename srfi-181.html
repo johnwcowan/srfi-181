@@ -124,8 +124,8 @@ or <code>#f</code> or omitted, in which case no action is taken.
 </ul>
 
 
-<div align=left><code>(make-custom-binary-input-port </code><i>id</i> <i>read!</i>
-<i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i>)</code></div><p>
+<div><code>(make-custom-binary-input-port </code><i>id</i> <i>read!</i>
+<i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i>)</div><p>
 Returns a newly created binary input port whose byte source is
 an arbitrary algorithm represented by the <i>read!</i> procedure.
 <ul>
@@ -152,8 +152,8 @@ integer representing the current byte position of the input port.
 The <i>set-position!</i> procedure sets the byte
 position of the input port to <i>pos</i>.
 </ul>
-<div align=left><code>(make-custom-textual-input-port </code><i>id</i> <i>read!</i>
-<i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i>)</code></div><p>
+<div><code>(make-custom-textual-input-port </code><i>id</i> <i>read!</i>
+<i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i>)</div><p>
 Returns a newly created textual input port whose character source is
 an arbitrary algorithm represented by the <i>read!</i> procedure.</p>
 <ul>
@@ -185,8 +185,8 @@ implementation-defined type.
 The <i>set-position!</i> procedure sets the
 position of the input port to <i>pos</i>.
 </ul>
-<div align=left><code>(make-custom-binary-output-port </code>id</i>
-<i>write!</i>&nbsp;<i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i> [<i>flush</i>])</code></div><p>
+<div><code>(make-custom-binary-output-port </code>id
+<i>write!</i>&nbsp;<i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i> [<i>flush</i>])</div><p>
 Returns a newly created binary output port whose byte sink is
 an arbitrary algorithm represented by the <i>write!</i> procedure.</p>
 <ul>
@@ -213,8 +213,8 @@ integer representing the current byte position of the output port.
 The <i>set-position!</i> procedure sets the
 position of the output port to <i>pos</i>.
 </ul>
-<div align=left><code>(make-custom-textual-output-port </code><i>id</i>
-<i>write!</i>&nbsp;<i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i> [<i>flush</i>])</code></div><p>
+<div><code>(make-custom-textual-output-port </code><i>id</i>
+<i>write!</i>&nbsp;<i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i> [<i>flush</i>])</div><p>
 Returns a newly created textual output port whose character sink is
 an arbitrary algorithm represented by the <i>write!</i> procedure.
 <ul>
@@ -243,8 +243,8 @@ the input port.
 The <i>set-position!</i> procedure sets the
 position of the input port to <i>pos</i>.
 </ul>
-<div align=left><code>(make-custom-binary-input/output-port </code><i>id</i> <i>read!</i> <i>write!</i>
-<i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i> [<i>flush</i>])</code></div><p>
+<div><code>(make-custom-binary-input/output-port </code><i>id</i> <i>read!</i> <i>write!</i>
+<i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i> [<i>flush</i>])</div><p>
 Returns a newly created binary port that is both an input and an
 output port.  Its byte source and sink are arbitrary algorithms
 represented by the <i>read!</i> and <i>write!</i> procedures.
@@ -256,7 +256,7 @@ ports that support both input and output), but they are difficult to
 implement and there are no clear use cases for them, so they have been
 removed from this SRFI.</p>
 
-<div align=left><code>(make-file-error</code>&nbsp;<i>obj</i> ...)</code></div><p>
+<div><code>(make-file-error</code>&nbsp;<i>obj</i> ...)</div><p>
 Returns an object which satisfies the R7RS-small predicate
 <code>file-error?</code>.
 The use of the <i>objs</i> is implementation-defined.
@@ -270,7 +270,7 @@ from their <i>open</i> procedures.</p>
 Several different character encoding schemes exist that describe standard ways to
 encode characters and strings as byte sequences and to decode those
 sequences.
-Within this document, a </a><em>codec</em> is an immutable Scheme
+Within this document, a <em>codec</em> is an immutable Scheme
 object that represents a specific encoding scheme.
 A codec has one or more names, represented as strings,
 and whatever other properties it
@@ -342,7 +342,7 @@ Every transcoder can decode bytes as characters
 and encode characters as bytes.
 </p>
 <h3>Procedures</h3>
-<div><code>(</a>make-codec <i>string</i>)</code></div>
+<div><code>(make-codec <i>string</i>)</code></div>
 <p>Returns a codec representing
 the character encoding scheme one of whose
 whose names is the case-insensitive string <i>string</i>.</p>
@@ -458,8 +458,6 @@ not necessarily be exposed,
 and of <code>make-codec</code>.
 Therefore, no implementation is provided here, especially since 
 a portable implementation is not possible.</p>
-Therefore, no implementation is provided here, especially since 
-a portable implementation is not possible.</p>
 
 <p>However, strictly conforming R6RS implementations will not accept the
 <i>flush</i> argument, though a wrapper to accept and ignore it would be
@@ -491,7 +489,7 @@ that John was happy to adopt.  Thanks also to Mikel More,
 who convinced him of the necessity of having custom and transcoded ports in R7RS-large.
 
 <h1>Copyright</h1>
-John Cowan does not claim copyright on his <i>de minimis</i> contributions
+<p>John Cowan does not claim copyright on his <i>de minimis</i> contributions
 to this SRFI.  Its content is drawn almost entirely from R6RS,
 which does not have a copyright notice.
 It does, however, contain the following copyright license:</p>
