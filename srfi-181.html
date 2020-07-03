@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>SRFI 181: Custom ports</title>
+    <title>SRFI 181: Custom ports (including transcoded ports)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/srfi.css" type="text/css" />
     <link href="/favicon.png" rel="icon" sizes="192x192" type="image/png" />
@@ -12,9 +12,9 @@
 
 <h1>Title</h1>
 
-Custom ports
+Custom ports (including transcoded ports)
 
-<h1>Author</h1>
+<h1>Authors</h1>
 
 The R6RS editors; John Cowan (shepherd)
 
@@ -34,6 +34,8 @@ The R6RS editors; John Cowan (shepherd)
 <h1>Abstract</h1>
 
 <p>This SRFI is a lightly edited version of parts of
+<a href="http://www.r6rs.org/final/html/r6rs-lib/r6rs-lib-Z-H-1.html#node_toc_node_sec_8.2.4">
+library section 8.2.4</a>,
 <a href="http://www.r6rs.org/final/html/r6rs-lib/r6rs-lib-Z-H-9.html#node_sec_8.2.7">
 library section 8.2.7</a>,
 <a href="http://www.r6rs.org/final/html/r6rs-lib/r6rs-lib-Z-H-9.html#node_sec_8.2.10">
@@ -42,8 +44,17 @@ library section 8.2.10</a>, and
 library section 8.2.13</a>
 of the R6RS.
 These sections are themselves based on parts of
-<a href="http://srfi.schemers.org/srfi-79/srfi-79.html">SRFI 79</a>.
-These procedures provide support for transcoders and transcoded ports.</p>
+<a href="http://srfi.schemers.org/srfi-79/srfi-79.html">SRFI 79</a>,
+<a href="http://srfi.schemers.org/srfi-80/srfi-80.html">SRFI 80</a> and
+<a href="http://srfi.schemers.org/srfi-81/srfi-81.html">SRFI 81</a>.
+These procedures provide a hook into the Scheme port system from below, allowing the
+creation of custom ports that behave as much as possible like the standard
+file, string, and bytevector ports, but that call a procedure to produce
+data to input ports or to consume data from output ports.
+Procedures for creating ports that transcode
+between bytes and characters are an important special
+case and are also documented in this SRFI.
+</p>
 
 <h1>Issues</h1>
 
@@ -53,7 +64,7 @@ None at present.
 
 <p>When reading from (or writing to) files, devices, pipes, sockets,
 or other sources (or sinks) of data, it's often useful or necessary
-to include one or more transformations on the data.</p>
+to perform one or more transformations on the data.</p>
 
 <p>All of these can be done at a level above Scheme ports, but with some
 loss in convenience.  In particular, the high-level Scheme I/O procedures
@@ -64,7 +75,7 @@ and pass it on to some other port, convenience is served.  It is also
 straightforward to chain custom ports together
 in order to create transformation pipelines.</p>
 
-<p>Examples of such transformations include:</p>
+<p>Examples of such transformations are:</p>
 <ul>
 <li>compression and decompression</li>
 <li>encryption and decryption</li>
@@ -79,9 +90,21 @@ which is the value of a parameter at the time of the read or write</li>
 <li>code obfuscation</li>
 </ul>
 
+<p>A very important case of transformation is character encoding
+and decoding.  It's sometimes useful or necessary
+to handle textual data that are encoded differently from the system default encoding.
+This SRFI provides comprehensive facilities for handling
+many different encodings by creating a custom textual port on top of a binary port.
+</p>
+
 <h1>Specification</h1>
 
-<p>The types of the arguments to the procedures of this SRFI
+<p>Note: The effect of <code>char-ready?</code> and <code>u8-ready?</code>
+on custom ports is unspecified.</p>
+
+<h2>Custom ports in general</h2>
+
+<p>The types of the arguments to the procedures of this section of this SRFI
 are as follows:</p>
 <ul>
 <li><p>The <i>read!</i> and <i>write!</i> arguments
@@ -99,13 +122,6 @@ that takes any necessary actions when the port is flushed,
 or <code>#f</code> or omitted, in which case no action is taken.
 </ul>
 
-<p>The effect of the following procedures on custom ports is undefined:</p>
-<ul>
-<li><code>char-ready?</code></li>
-<li><code>u8-ready?</code></li>
-<li><code>peek-char?</code></li>
-<li><code>peek-u8?</code></li>
-</ul>
 
 <div align=left><code>(make-custom-binary-input-port </code><i>id</i> <i>read!</i>
 <i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i>)</code></div><p>
@@ -246,13 +262,201 @@ The use of the <i>objs</i> is implementation-defined.
 Custom ports may raise the result of this procedure
 from their <i>open</i> procedures.</p>
 
+<h2>Transcoded ports</h2>
+
+<h3>Codecs</h3>
+<p>
+Several different character encoding schemes exist that describe standard ways to
+encode characters and strings as byte sequences and to decode those
+sequences.
+Within this document, a </a><em>codec</em> is an immutable Scheme
+object that represents a specific encoding scheme.
+A codec has one or more names, represented as strings,
+and whatever other properties it
+requires in order to implement specific rules for
+encoding and decoding.</p>
+<h3>End-of-line styles</h3>
+<p>
+An <em>end-of-line style</em> is a symbol that
+describes how a textual port transcodes representations of
+line endings.
+In order to conform to this SRFI, implementations must
+support at least three kinds of line endings:
+a U+000A (newline) character,
+a U+000D (return) character, and
+an U+000A followed by a U+000D (a CRLF sequence).
+Implementations may support other line endings as well.</p>
+<p>
+The end-of-line style symbol <code>none</code>
+means that no line ending conversion is performed in either direction.
+On an input port, any other symbol will convert
+any line ending into a <code>#\newline</code> character.
+On an output port, the symbol <code>crlf</code> causes
+any line ending to be output as a CRLF sequence,
+but the symbol <code>lf</code> causes
+any line ending to be output
+as a <code>#\newline</code> character,
+All other characters remain unchanged.
+Implementations may support additional symbols.</p>
+<h3>Error-handling modes</h3>
+<p>
+An <em>error-handling mode</em> is a symbol that
+specifies the behavior
+of textual I/O operations in the presence of encoding or decoding
+errors.</p>
+<p>
+If a textual input operation encounters an invalid or incomplete
+character encoding,
+then if the error-handling mode is <code>replace</code>, the replacement
+it is treated as the character U+FFFD, or if that character is
+not representable by the implementation or is not permitted in
+strings, then by the character U+003F (question mark).
+But if the error-handling mode is <code>raise</code>,
+an error satisfying <code>i/o-decoding-error?</code> is signaled,
+an appropriate number of bytes are ignored, and decoding
+continues with the following bytes.</p>
+<p>
+If a textual output operation encounters a character it cannot encode,
+then if the error-handling mode is <code>replace</code>, a codec-specific
+replacement character is emitted by the transcoder, and encoding
+continues with the next character.
+The replacement character is U+FFFD for transcoders whose codec
+can encode this character, but is U+003F (question mark)
+if it cannot.
+But if the error-handling mode is <code>raise</code>, an
+an error satisfying <code>i/o-encoding-error?</code> is raised,
+and encoding continues with the next character.
+</p>
+<p>
+Implementations may support additional symbols.</p>
+<h3>Transcoders</h3>
+<p>
+A <em>transcoder</em> is an immutable Scheme object that combines
+a codec, an end-of-line style, and an error-handling mode.
+Each transcoder represents some specific bidirectional (but not
+necessarily lossless), possibly stateful translation between byte
+sequences and the Scheme-level characters and strings
+allowed by the implementation.
+Every transcoder can decode bytes as characters
+and encode characters as bytes.
+</p>
+<h3>Procedures</h3>
+<div><code>(</a>make-codec <i>string</i>)</code></div>
+<p>Returns a codec representing
+the character encoding scheme one of whose
+whose names is the case-insensitive string <i>string</i>.</p>
+<p>Some  character encoding names can be found at
+<a href="https://encoding.spec.whatwg.org/#names-and-labels">
+the WHATWG encoding specification</a>, and implementations
+should recognize and support all of these.
+There are a total of 39 encodings, which have between them
+218 standard names.  Note that the "replacement" codec
+signals an error whenever it is used.
+Additional encoding names listed at
+<a href="https://www.iana.org/assignments/character-sets/character-sets.xhtml">
+the IANA page on character sets</a>
+may also be recognized and supported.</p>
+<p>If <code>make-codec</code> is called
+on a string that the implementation does not support,
+an error is signaled.</p>
+
+<div><code>(latin-1-codec<i></i>)</code></div>
+<div><code>(utf-8-codec<i></i>)</code></div>
+<div><code>(utf-16-codec<i></i>)</code></div>
+<p>
+These are predefined codecs for the ISO 8859-1, UTF-8,
+and UTF-16 encoding schemes.
+When decoding, the implementation must respect any BOM present, but
+the implementation may assume either endianness if no BOM is present,
+but if no BOM is present, the implementation may assume either endianness.
+When encoding, whether a BOM is output and what endianness is used
+are implementation-dependent.
+A call to any of these procedures returns a value that is equal in the
+sense of <code>eqv?</code> to the result of any other call to the same
+procedure.
+</p>
+<p>
+</p>
+<div><code>(native-eol-style<i></i>)</code></div>
+<p>
+Returns the default end-of-line style of the underlying platform, typically
+<code>lf</code> on Unix and <code>crlf</code> on Windows.
+</p>
+<div><code>(i/o-decoding-error?<i> obj</i>)</code></div>
+
+<p>
+Returns <code>#t</code> if <i>obj</i> is
+an exception raised when one of the operations for
+textual input from a port encounters a sequence of bytes that cannot
+be decoded into a character or string by the port's transcoder.</p>
+<p>
+When such an exception is raised, the port's position is past
+the invalid encoding.
+</p>
+<div><code>(i/o-encoding-error?<i> obj</i>)</code></div>
+<p>
+Returns <code>#t</code> if <i>obj</i> is
+an exception raised when one of the operations for
+textual output to a port encounters a character that cannot be
+encoded into bytes by the port's transcoder.</p>
+<div><code>(i/o-encoding-error-char<i> i/o-encoding-condition</i>)</code></div>
+<p>
+Returns the character that could not be encoded
+when the condition <i>i/o-encoding-condition</i> was signaled.
+</p>
+<div><code>(make-transcoder<i> codec eol-style handling-mode</i>)</code></div>
+<p>
+Returns a transcoder with the behavior specified by its arguments.
+</p>
+<p>
+</p>
+<div><code>(native-transcoder<i></i>)</code></div>
+<p>
+Returns an implementation-dependent transcoder that represents a
+possibly locale-dependent &ldquo;native&rdquo; transcoding.
+This should be equivalent to the transcoder employed by
+Scheme operations that open textual ports.</p>
+<div><code>(<a id="node_idx_650"></a>transcoded-port<i> binary-port transcoder</i>)</code><span style="margin-left: .5em">&zwnj;</span><span style="margin-left: .5em">&zwnj;</span>procedure&nbsp;</div>
+<p>
+Returns a new textual port with the specified <i>transcoder</i>
+from <i>binary-port</i>.
+The new textual port's externally visible state is largely the same as
+that of <i>binary-port</i>.
+If <i>binary-port</i> is an input port, the new textual
+port will be an input port and
+will decode the bytes of <i>binary-port</i>.
+If <i>binary-port</i> is an output port, the new textual
+port will be an output port and
+will write encoded characters to <i>binary-port</i>.
+<p>
+It is an error to call this procedure on <i>binary-port</i>
+after it has been read from or written to.
+It is also an error to read or write on <i>binary-port</i>
+after calling this procedure.
+</p>
+<div><code>(bytevector-&gt;string<i> bytevector transcoder</i>)</code></div>
+<p>
+Returns the string that results from decoding the
+<i>bytevector</i> according to the input direction of the transcoder.
+</p>
+<div><code>(string-&gt;bytevector<i> string transcoder</i>)</code></div>
+<p>
+Returns the bytevector that results from encoding the
+<i>string</i> according to the output direction of the transcoder.
+</p>
+<p>
+</p>
+
 <h1>Implementation</h1>
 
-<p>Every conforming R6RS implementation, including at least Chez, Guile, IronScheme,
+<p>Every conforming R6RS implementation, including at least Chez, IronScheme,
 Larceny, Racket, and Vicare, already provides these procedures
-in the <code>(rnrs io ports)</code> library, with the exception of the
-<code>make-file-error</code> procedure, which will already exist, though
-not necessarily be exposed, in most Schemes.
+in the <code>(rnrs io ports)</code> library, with the exceptions
+of <code>make-file-error</code>, which will already exist though
+not necessarily be exposed,
+and of <code>make-codec</code>.
+Therefore, no implementation is provided here, especially since 
+a portable implementation is not possible.</p>
 Therefore, no implementation is provided here, especially since 
 a portable implementation is not possible.</p>
 
@@ -261,7 +465,7 @@ a portable implementation is not possible.</p>
 trivial.  Furthermore, the <i>read!</i> and <i>write!</i> procedures
 will never be passed a vector of characters, but always a string.</p>
 
-<p>This SRFI can trivially be implemented on top of the Chicken
+<p>This SRFI can be implemented on top of the Chicken
 procedures <code>make-input-port</code> and <code>make-output-port</code>
 in the <code>(chicken ports)</code> library.
 Chicken makes
@@ -271,8 +475,8 @@ distinguish between textual and binary ports (as permitted by R7RS), and its str
 can store binary data; indeed, interpretation as characters
 is up to a higher-level library such as the <code>utf8</code> egg.
 
-<p>Shiro Kawai has provided a sample implementation that illustates
-both SRFI 181 and SRFI 192.  It can be found in the <a
+<p>Shiro Kawai has provided a sample implementation that illustrates
+both transcoded ports and SRFI 192.  It can be found in the <a
 href="https://github.com/scheme-requests-for-implementation/srfi-192">Git
 repository</a> for SRFI 192 and in <a
 href="https://srfi.schemers.org/srfi-192/srfi-192.tgz">this .tgz
@@ -280,10 +484,10 @@ archive</a>.</p>
 
 <h1>Acknowledgements</h1>
 
-This would have been much more difficult without the R6RS team,
+This SRFI would have been much more difficult to write without the R6RS team,
 who produced a good-enough (as opposed to perfect) design
 that John was happy to adopt.  Thanks also to Mikel More,
-who convinced him of the necessity of having custom ports in R7RS-large.
+who convinced him of the necessity of having custom and transcoded ports in R7RS-large.
 
 <h1>Copyright</h1>
 John Cowan does not claim copyright on his <i>de minimis</i> contributions
