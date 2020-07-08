@@ -86,7 +86,6 @@ in order to create transformation pipelines.</p>
 <li>ports which read from or write to a port<br>
 which is the value of a parameter at the time of the read or write</li>
 <li>script transliteration</li>
-<li>object serialization and deserialization</li>
 <li>code obfuscation</li>
 </ul>
 
@@ -263,7 +262,61 @@ Custom ports may raise the result of this procedure
 from their <i>open</i> procedures.</p>
 
 <h2>Transcoded ports</h2>
+<h3>Transcoders</h3>
+<p>
+A <em>transcoder</em> is an immutable Scheme object that combines
+a codec, an end-of-line style, and an error-handling mode
+(see the following sections for details).
+Each transcoder represents some specific bidirectional (but not
+necessarily lossless), possibly stateful translation between byte
+sequences and the Scheme-level characters and strings
+allowed by the implementation.
+Every transcoder can decode bytes as characters
+and encode characters as bytes.
+</p>
+<div><code>(make-transcoder<i> codec eol-style handling-mode</i>)</code></div>
+<p>
+Returns a transcoder with the behavior specified by its arguments.
+</p>
+<p>
+</p>
+<div><code>(native-transcoder<i></i>)</code></div>
+<p>
+Returns an implementation-dependent transcoder that represents a
+possibly locale-dependent &ldquo;native&rdquo; transcoding.
+This should be equivalent to the transcoder employed by
+Scheme operations that open textual ports.</p>
 
+<div><code>(<a id="node_idx_650"></a>transcoded-port<i> binary-port transcoder</i>)</code><span style="margin-left: .5em">&zwnj;</span><span style="margin-left: .5em">&zwnj;</span>procedure&nbsp;</div>
+<p>
+Returns a new textual port with the specified <i>transcoder</i>
+from <i>binary-port</i>.
+The new textual port's externally visible state is largely the same as
+that of <i>binary-port</i>.
+If <i>binary-port</i> is an input port, the new textual
+port will be an input port and
+will decode the bytes of <i>binary-port</i>.
+If <i>binary-port</i> is an output port, the new textual
+port will be an output port and
+will write encoded characters to <i>binary-port</i>.
+<p>
+It is an error to call this procedure on <i>binary-port</i>
+after it has been read from or written to.
+It is also an error to read or write on <i>binary-port</i>
+after calling this procedure.
+</p>
+<div><code>(bytevector-&gt;string<i> bytevector transcoder</i>)</code></div>
+<p>
+Returns the string that results from decoding the
+<i>bytevector</i> according to the input direction of the transcoder.
+</p>
+<div><code>(string-&gt;bytevector<i> string transcoder</i>)</code></div>
+<p>
+Returns the bytevector that results from encoding the
+<i>string</i> according to the output direction of the transcoder.
+</p>
+<p>
+</p>
 <h3>Codecs</h3>
 <p>
 Several different character encoding schemes exist that describe standard ways to
@@ -275,72 +328,6 @@ A codec has one or more names, represented as strings,
 and whatever other properties it
 requires in order to implement specific rules for
 encoding and decoding.</p>
-<h3>End-of-line styles</h3>
-<p>
-An <em>end-of-line style</em> is a symbol that
-describes how a textual port transcodes representations of
-line endings.
-In order to conform to this SRFI, implementations must
-support at least three kinds of line endings:
-a U+000A (newline) character,
-a U+000D (return) character, and
-an U+000A followed by a U+000D (a CRLF sequence).
-Implementations may support other line endings as well.</p>
-<p>
-The end-of-line style symbol <code>none</code>
-means that no line ending conversion is performed in either direction.
-On an input port, any other symbol will convert
-any line ending into a <code>#\newline</code> character.
-On an output port, the symbol <code>crlf</code> causes
-any line ending to be output as a CRLF sequence,
-but the symbol <code>lf</code> causes
-any line ending to be output
-as a <code>#\newline</code> character,
-All other characters remain unchanged.
-Implementations may support additional symbols.</p>
-<h3>Error-handling modes</h3>
-<p>
-An <em>error-handling mode</em> is a symbol that
-specifies the behavior
-of textual I/O operations in the presence of encoding or decoding
-errors.</p>
-<p>
-If a textual input operation encounters an invalid or incomplete
-character encoding,
-then if the error-handling mode is <code>replace</code>, the replacement
-it is treated as the character U+FFFD, or if that character is
-not representable by the implementation or is not permitted in
-strings, then by the character U+003F (question mark).
-But if the error-handling mode is <code>raise</code>,
-an error satisfying <code>i/o-decoding-error?</code> is signaled,
-an appropriate number of bytes are ignored, and decoding
-continues with the following bytes.</p>
-<p>
-If a textual output operation encounters a character it cannot encode,
-then if the error-handling mode is <code>replace</code>, a codec-specific
-replacement character is emitted by the transcoder, and encoding
-continues with the next character.
-The replacement character is U+FFFD for transcoders whose codec
-can encode this character, but is U+003F (question mark)
-if it cannot.
-But if the error-handling mode is <code>raise</code>, an
-an error satisfying <code>i/o-encoding-error?</code> is raised,
-and encoding continues with the next character.
-</p>
-<p>
-Implementations may support additional symbols.</p>
-<h3>Transcoders</h3>
-<p>
-A <em>transcoder</em> is an immutable Scheme object that combines
-a codec, an end-of-line style, and an error-handling mode.
-Each transcoder represents some specific bidirectional (but not
-necessarily lossless), possibly stateful translation between byte
-sequences and the Scheme-level characters and strings
-allowed by the implementation.
-Every transcoder can decode bytes as characters
-and encode characters as bytes.
-</p>
-<h3>Procedures</h3>
 <div><code>(</a>make-codec <i>string</i>)</code></div>
 <p>Returns a codec representing
 the character encoding scheme one of whose
@@ -375,13 +362,66 @@ A call to any of these procedures returns a value that is equal in the
 sense of <code>eqv?</code> to the result of any other call to the same
 procedure.
 </p>
+<h3>End-of-line styles</h3>
 <p>
-</p>
+An <em>end-of-line style</em> is a symbol that
+describes how a textual port transcodes representations of
+line endings.
+In order to conform to this SRFI, implementations must
+support at least three kinds of line endings:
+a <code>#\newline</code> character,
+a <code>#\return</code> character, and
+an <code>#\return</code> followed by a <code><code>#\newline</code></code>,
+which is known as a <i>CRLF sequence</i>.
+Implementations may support other line endings as well.</p>
+<p>
+The end-of-line style symbol <code>none</code>
+means that no line ending conversion is performed in either direction.
+On an input port, any other symbol will convert
+any line ending into a <code>#\newline</code> character.
+On an output port, the symbol <code>crlf</code> causes
+any line ending to be output as a CRLF sequence,
+whereas the symbol <code>lf</code> causes
+any line ending to be output
+as a <code>#\newline</code> character,
+All other characters remain unchanged.
+Implementations may support additional symbols.</p>
 <div><code>(native-eol-style<i></i>)</code></div>
 <p>
 Returns the default end-of-line style of the underlying platform, typically
 <code>lf</code> on Unix and <code>crlf</code> on Windows.
 </p>
+<h3>Error-handling modes</h3>
+<p>
+An <em>error-handling mode</em> is a symbol that
+specifies the behavior
+of textual I/O operations in the presence of encoding or decoding
+errors.</p>
+<p>
+If a textual input operation encounters an invalid or incomplete
+character encoding,
+then if the error-handling mode is <code>replace</code>, the replacement
+is treated as the character <code>#\xFFFD;</code>, or if that character is
+not representable by the implementation or is not permitted in
+strings, then by the character <code>#\x003F;</code> (question mark).
+But if the error-handling mode is <code>raise</code>,
+an error satisfying <code>i/o-decoding-error?</code> is signaled,
+an appropriate number of bytes are ignored, and decoding
+continues with the following bytes.</p>
+<p>
+If a textual output operation encounters a character it cannot encode,
+an if the error-handling mode is <code>replace</code>, the
+replacement character is emitted by the transcoder, and encoding
+continues with the next character.
+The replacement character is <code>#\xFFFD</code> for transcoders whose codec
+can encode this character, but is <code>#\?</code> (question mark)
+if it cannot.
+But if the error-handling mode is <code>raise</code>, an
+an error satisfying <code>i/o-encoding-error?</code> is raised,
+and encoding continues with the next character.
+</p>
+<p>
+Implementations may support additional symbols.</p>
 <div><code>(i/o-decoding-error?<i> obj</i>)</code></div>
 
 <p>
@@ -403,48 +443,6 @@ encoded into bytes by the port's transcoder.</p>
 <p>
 Returns the character that could not be encoded
 when the condition <i>i/o-encoding-condition</i> was signaled.
-</p>
-<div><code>(make-transcoder<i> codec eol-style handling-mode</i>)</code></div>
-<p>
-Returns a transcoder with the behavior specified by its arguments.
-</p>
-<p>
-</p>
-<div><code>(native-transcoder<i></i>)</code></div>
-<p>
-Returns an implementation-dependent transcoder that represents a
-possibly locale-dependent &ldquo;native&rdquo; transcoding.
-This should be equivalent to the transcoder employed by
-Scheme operations that open textual ports.</p>
-<div><code>(<a id="node_idx_650"></a>transcoded-port<i> binary-port transcoder</i>)</code><span style="margin-left: .5em">&zwnj;</span><span style="margin-left: .5em">&zwnj;</span>procedure&nbsp;</div>
-<p>
-Returns a new textual port with the specified <i>transcoder</i>
-from <i>binary-port</i>.
-The new textual port's externally visible state is largely the same as
-that of <i>binary-port</i>.
-If <i>binary-port</i> is an input port, the new textual
-port will be an input port and
-will decode the bytes of <i>binary-port</i>.
-If <i>binary-port</i> is an output port, the new textual
-port will be an output port and
-will write encoded characters to <i>binary-port</i>.
-<p>
-It is an error to call this procedure on <i>binary-port</i>
-after it has been read from or written to.
-It is also an error to read or write on <i>binary-port</i>
-after calling this procedure.
-</p>
-<div><code>(bytevector-&gt;string<i> bytevector transcoder</i>)</code></div>
-<p>
-Returns the string that results from decoding the
-<i>bytevector</i> according to the input direction of the transcoder.
-</p>
-<div><code>(string-&gt;bytevector<i> string transcoder</i>)</code></div>
-<p>
-Returns the bytevector that results from encoding the
-<i>string</i> according to the output direction of the transcoder.
-</p>
-<p>
 </p>
 
 <h1>Implementation</h1>
