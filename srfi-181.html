@@ -1,24 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8">
     <title>SRFI 181: Custom ports (including transcoded ports)</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="/srfi.css" type="text/css" />
-    <link href="/favicon.png" rel="icon" sizes="192x192" type="image/png" />
+    <link href="/favicon.png" rel="icon" sizes="192x192" type="image/png">
+    <link rel="stylesheet" href="/srfi.css" type="text/css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
 
   <body>
+    <h1><a href="https://srfi.schemers.org/"><img class="srfi-logo" src="https://srfi.schemers.org/srfi-logo.svg" alt="SRFI logo" /></a>181: Custom ports (including transcoded ports)</h1>
 
-<h1>Title</h1>
+<p>by the R6RS editors; John Cowan (shepherd)</p>
 
-Custom ports (including transcoded ports)
-
-<h1>Authors</h1>
-
-The R6RS editors; John Cowan (shepherd)
-
-<h1>Status</h1>
+<h2>Status</h2>
 
 <p>This SRFI is currently in <em>draft</em> status.  Here is <a href="https://srfi.schemers.org/srfi-process.html">an explanation</a> of each status that a SRFI can hold.  To provide input on this SRFI, please send email to <code><a href="mailto:srfi+minus+181+at+srfi+dotschemers+dot+org">srfi-181@<span class="antispam">nospam</span>srfi.schemers.org</a></code>.  To subscribe to the list, follow <a href="https://srfi.schemers.org/srfi-list-subscribe.html">these instructions</a>.  You can access previous messages via the mailing list <a href="https://srfi-email.schemers.org/srfi-181">archive</a>.</p>
 <ul>
@@ -29,9 +24,10 @@ The R6RS editors; John Cowan (shepherd)
   <li>Draft #3 published: 2020-04-15</li>
   <li>Draft #4 published: 2020-05-12</li>
   <li>Draft #5 published: 2020-06-16</li>
+  <li>Draft #6 published: 2020-07-02</li>
 </ul>
 
-<h1>Abstract</h1>
+<h2>Abstract</h2>
 
 <p>This SRFI is a lightly edited version of parts of
 <a href="http://www.r6rs.org/final/html/r6rs-lib/r6rs-lib-Z-H-1.html#node_toc_node_sec_8.2.4">
@@ -56,11 +52,11 @@ between bytes and characters are an important special
 case and are also documented in this SRFI.
 </p>
 
-<h1>Issues</h1>
+<h2>Issues</h2>
 
 None at present.
 
-<h1>Rationale</h1>
+<h2>Rationale</h2>
 
 <p>When reading from (or writing to) files, devices, pipes, sockets,
 or other sources (or sinks) of data, it's often useful or necessary
@@ -96,12 +92,12 @@ This SRFI provides comprehensive facilities for handling
 many different encodings by creating a custom textual port on top of a binary port.
 </p>
 
-<h1>Specification</h1>
+<h2>Specification</h2>
 
 <p>Note: The effect of <code>char-ready?</code> and <code>u8-ready?</code>
 on custom ports is unspecified.</p>
 
-<h2>Custom ports in general</h2>
+<h3>Custom ports in general</h3>
 
 <p>The types of the arguments to the procedures of this section of this SRFI
 are as follows:</p>
@@ -122,8 +118,8 @@ or <code>#f</code> or omitted, in which case no action is taken.
 </ul>
 
 
-<div align=left><code>(make-custom-binary-input-port </code><i>id</i> <i>read!</i>
-<i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i>)</code></div><p>
+<div><code>(make-custom-binary-input-port </code><i>id</i> <i>read!</i>
+<i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i>)</div><p>
 Returns a newly created binary input port whose byte source is
 an arbitrary algorithm represented by the <i>read!</i> procedure.
 <ul>
@@ -150,8 +146,8 @@ integer representing the current byte position of the input port.
 The <i>set-position!</i> procedure sets the byte
 position of the input port to <i>pos</i>.
 </ul>
-<div align=left><code>(make-custom-textual-input-port </code><i>id</i> <i>read!</i>
-<i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i>)</code></div><p>
+<div><code>(make-custom-textual-input-port </code><i>id</i> <i>read!</i>
+<i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i>)</div><p>
 Returns a newly created textual input port whose character source is
 an arbitrary algorithm represented by the <i>read!</i> procedure.</p>
 <ul>
@@ -175,7 +171,7 @@ procedure writes no bytes to the buffer and returns 0.</p></li>
 <p>
 The <i>get-position</i> procedure returns an
 implementation-defined object representing the current position of
-the input port. 
+the input port.
 <li><p>(<i>set-position!</i> <i>pos</i>)</p>
 <p>
 It is an error if <i>pos</i> does not belong to the correct
@@ -183,8 +179,8 @@ implementation-defined type.
 The <i>set-position!</i> procedure sets the
 position of the input port to <i>pos</i>.
 </ul>
-<div align=left><code>(make-custom-binary-output-port </code>id</i>
-<i>write!</i>&nbsp;<i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i> [<i>flush</i>])</code></div><p>
+<div><code>(make-custom-binary-output-port </code>id
+<i>write!</i>&nbsp;<i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i> [<i>flush</i>])</div><p>
 Returns a newly created binary output port whose byte sink is
 an arbitrary algorithm represented by the <i>write!</i> procedure.</p>
 <ul>
@@ -196,7 +192,7 @@ integers,
 and <i>bytevector</i> is a bytevector whose length is at least
 <i>start</i>  +  <i>count</i>.
 <p>The <i>write!</i> procedure writes up to <i>count</i> bytes
-from <i>bytevector</i> starting at index <i>start</i> 
+from <i>bytevector</i> starting at index <i>start</i>
 to the byte sink.
 The <i>write!</i> procedure returns the number of
 bytes that it wrote, as an exact integer.
@@ -211,8 +207,8 @@ integer representing the current byte position of the output port.
 The <i>set-position!</i> procedure sets the
 position of the output port to <i>pos</i>.
 </ul>
-<div align=left><code>(make-custom-textual-output-port </code><i>id</i>
-<i>write!</i>&nbsp;<i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i> [<i>flush</i>])</code></div><p>
+<div><code>(make-custom-textual-output-port </code><i>id</i>
+<i>write!</i>&nbsp;<i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i> [<i>flush</i>])</div><p>
 Returns a newly created textual output port whose character sink is
 an arbitrary algorithm represented by the <i>write!</i> procedure.
 <ul>
@@ -225,7 +221,7 @@ and <i>string-or-char-vector</i> is either a string
 or a vector containing characters, at the implementations's option.
 In either case its length is at least <i>start</i>  +  <i>count</i>.
 <p>The <i>write!</i> procedure writes up to <i>count</i> characters
-from <i>string-or-char-vector</i> starting at index <i>start</i> 
+from <i>string-or-char-vector</i> starting at index <i>start</i>
 to the character sink.
 In any case, the <i>write!</i> procedure returns the number of
 characters that it wrote, as an exact integer.
@@ -241,8 +237,8 @@ the input port.
 The <i>set-position!</i> procedure sets the
 position of the input port to <i>pos</i>.
 </ul>
-<div align=left><code>(make-custom-binary-input/output-port </code><i>id</i> <i>read!</i> <i>write!</i>
-<i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i> [<i>flush</i>])</code></div><p>
+<div><code>(make-custom-binary-input/output-port </code><i>id</i> <i>read!</i> <i>write!</i>
+<i>get-position</i>&nbsp;<i>set-position!</i>&nbsp;<i>close</i> [<i>flush</i>])</div><p>
 Returns a newly created binary port that is both an input and an
 output port.  Its byte source and sink are arbitrary algorithms
 represented by the <i>read!</i> and <i>write!</i> procedures.
@@ -254,7 +250,7 @@ ports that support both input and output), but they are difficult to
 implement and there are no clear use cases for them, so they have been
 removed from this SRFI.</p>
 
-<div align=left><code>(make-file-error</code>&nbsp;<i>obj</i> ...)</code></div><p>
+<div><code>(make-file-error</code>&nbsp;<i>obj</i> ...)</div><p>
 Returns an object which satisfies the R7RS-small predicate
 <code>file-error?</code>.
 The use of the <i>objs</i> is implementation-defined.
@@ -262,6 +258,9 @@ Custom ports may raise the result of this procedure
 from their <i>open</i> procedures.</p>
 
 <h2>Transcoded ports</h2>
+<p>In order to create a port that transcodes between characters and bytes,
+it is necessary to have a <i>transcoder</i> available.
+The following sections explain how to create and use transcoders.</p>
 <h3>Transcoders</h3>
 <p>
 A <em>transcoder</em> is an immutable Scheme object that combines
@@ -322,7 +321,7 @@ Returns the bytevector that results from encoding the
 Several different character encoding schemes exist that describe standard ways to
 encode characters and strings as byte sequences and to decode those
 sequences.
-Within this document, a </a><em>codec</em> is an immutable Scheme
+Within this document, a <em>codec</em> is an immutable Scheme
 object that represents a specific encoding scheme.
 A codec has one or more names, represented as strings,
 and whatever other properties it
@@ -445,7 +444,7 @@ Returns the character that could not be encoded
 when the condition <i>i/o-encoding-condition</i> was signaled.
 </p>
 
-<h1>Implementation</h1>
+<h2>Implementation</h2>
 
 <p>Every conforming R6RS implementation, including at least Chez, IronScheme,
 Larceny, Racket, and Vicare, already provides these procedures
@@ -453,9 +452,7 @@ in the <code>(rnrs io ports)</code> library, with the exceptions
 of <code>make-file-error</code>, which will already exist though
 not necessarily be exposed,
 and of <code>make-codec</code>.
-Therefore, no implementation is provided here, especially since 
-a portable implementation is not possible.</p>
-Therefore, no implementation is provided here, especially since 
+Therefore, no implementation is provided here, especially since
 a portable implementation is not possible.</p>
 
 <p>However, strictly conforming R6RS implementations will not accept the
@@ -480,16 +477,15 @@ repository</a> for SRFI 192 and in <a
 href="https://srfi.schemers.org/srfi-192/srfi-192.tgz">this .tgz
 archive</a>.</p>
 
-<h1>Acknowledgements</h1>
+<h2>Acknowledgements</h2>
 
 This SRFI would have been much more difficult to write without the R6RS team,
 who produced a good-enough (as opposed to perfect) design
 that John was happy to adopt.  Thanks also to Mikel More,
 who convinced him of the necessity of having custom and transcoded ports in R7RS-large.
 
-<h1>Copyright</h1>
-John Cowan does not claim copyright on his <i>de minimis</i> contributions
-to this SRFI.  Its content is drawn almost entirely from R6RS,
+<h2>Copyright</h2>
+Much of the content of this SRFI is drawn from R6RS,
 which does not have a copyright notice.
 It does, however, contain the following copyright license:</p>
 
@@ -498,8 +494,7 @@ We intend this report to belong to the entire Scheme community, and so we grant 
 part without fee.
 </blockquote>
 
-<p>Nevertheless, in order to keep the lawyers happy, the standard
-SRFI license is subjoined:</p>
+<p>For the remaining content, the standard SRFI license applies:</p>
 
 <blockquote>
   Permission is hereby granted, free of charge, to any person

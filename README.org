@@ -1,16 +1,18 @@
-* SRFI 181: Custom ports
+* SRFI 181: Custom ports (including transcoded ports)
 
 ** by John Cowan
+
+Based on R6RS.
 
 
 
 keywords: [[https://srfi.schemers.org/?keywords=i/o][I/O]]
 
-This repository hosts [[https://srfi.schemers.org/srfi-181/][SRFI 181]]: Custom ports, a [[https://srfi.schemers.org/][Scheme Request for Implementation]].
+This repository hosts [[https://srfi.schemers.org/srfi-181/][SRFI 181]]: Custom ports (including transcoded ports), a [[https://srfi.schemers.org/][Scheme Request for Implementation]].
 
 This SRFI is in /draft/ status.
 
-See also [[https://srfi.schemers.org/srfi-79/][SRFI 79: Primitive I/O]], [[https://srfi.schemers.org/srfi-81/][SRFI 81: Port I/O]], [[https://srfi.schemers.org/srfi-82/][SRFI 82: Stream Ports]], [[https://srfi.schemers.org/srfi-91/][SRFI 91: Extended ports]], and [[https://srfi.schemers.org/srfi-192/][SRFI 192: Port Positioning]].
+See also [[https://srfi.schemers.org/srfi-79/][SRFI 79: Primitive I/O]], [[https://srfi.schemers.org/srfi-81/][SRFI 81: Port I/O]], [[https://srfi.schemers.org/srfi-82/][SRFI 82: Stream Ports]], [[https://srfi.schemers.org/srfi-91/][SRFI 91: Extended ports]], [[https://srfi.schemers.org/srfi-186/][SRFI 186: Transcoders and transcoded ports]], and [[https://srfi.schemers.org/srfi-192/][SRFI 192: Port Positioning]].
 
 The full documentation for this SRFI can be found in the [[https://srfi.schemers.org/srfi-181/srfi-181.html][SRFI Document]].
 
