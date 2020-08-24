@@ -108,7 +108,7 @@ are as follows:</p>
 <ul>
 <li><p>The <i>read!</i> and <i>write!</i> arguments
 are procedures that behave as specified below.
-<li><p>The <i>get-position</i> and <i>set-position</i>
+<li><p>The <i>get-position</i> and <i>set-position!<!/i>
 arguments may be procedures or <code>#f</code>, in which case calls to
 <a href="http://srfi.schemers.org/scheme-requests-for-implementation">
 SRFI 191</a> <code>port-position</code> and <code>set-port-position!</code>
@@ -348,7 +348,7 @@ the IANA page on character sets</a>
 may also be recognized and supported.</p>
 <p>If <code>make-codec</code> is called
 on a string that the implementation does not support,
-an error satisfying <code>error-object?</error> is signaled.</p>
+an error satisfying <code>error-object?</code> is signaled.</p>
 
 <div><code>(latin-1-codec<i></i>)</code></div>
 <div><code>(utf-8-codec<i></i>)</code></div>
@@ -480,6 +480,37 @@ href="https://github.com/scheme-requests-for-implementation/srfi-192">Git
 repository</a> for SRFI 192 and in <a
 href="https://srfi.schemers.org/srfi-192/srfi-192.tgz">this .tgz
 archive</a>.</p>
+
+<h3>Port positioning and peeking</h3>
+
+<p>The following considerations must be applied when <code>peek-char</code>
+and <code>peek-u8</code> are applied to custom ports.  Much of the
+following is derived from Shiro Kawai's README file in the SRFI 92
+implementation:</p>
+
+<p>If the source of characters or bytes (collectively known as
+<i>elements</i>) underlying a custom input port is in itself
+positionable (either because it is a positionable port or because
+it is a random-access data structure like a list, vector, or string),
+then the custom port can support the SRFI 192 and R6RS procedures
+<code>port-position</code> and <code>set-port-position!</code>.
+This is true even if reading an element from the custom port involves
+reading a variable number of elements from the source.
+If on the other hand the source is not seekable,
+then the <i>set-position!</i> procedure
+should be set to <code>#f</code>, and the
+custom port's position is simply the number of
+elements read from it so far.</p>
+
+<p>However, the Scheme implementation's port system must
+cache the position of a custom port before peeking it, because
+it may not be possible for the port to rewind its position.
+The peeked element is also cached, so that on the next
+read it can be returned.
+But if <code>port-position</code> is called before the
+peeked character is read, the port must return its
+cached position rather than calling the <i>get-position</i>
+procedure.</p>
 
 <h2>Acknowledgements</h2>
 
