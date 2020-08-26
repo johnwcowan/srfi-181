@@ -115,10 +115,12 @@ arguments may be procedures or <code>#f</code>, in which case calls to
 SRFI 191</a> <code>port-position</code> and <code>set-port-position!</code>
 respectively on the procedures are errors.
 <li><p>The <i>close</i> arguments may be a procedure
-that takes any required actions when the port is closed,
+that takes no arguments
+and performs any required actions when the port is closed,
 or <code>#f</code>, in which case no action is taken.
 <li><p>The optional <i>flush</i> argument may be a procedure
-that takes any necessary actions when the port is flushed,
+that takes no arguments
+and performs any necessary actions when the port is flushed,
 or <code>#f</code> or omitted, in which case no action is taken.
 </ul>
 
@@ -144,7 +146,8 @@ procedure writes no bytes to its bytevector and returns 0.</p>
 <li><p>(<i>get-position</i>)</p>
 <p>
 The <i>get-position</i> procedure returns an exact
-integer representing the current byte position of the input port.
+integer representing the current byte position of the input port,
+which coincides the position the next call of <i>read!</i> procedure reads from.
 <li><p>(<i>set-position!</i> <i>pos</i>)</p>
 <p>
 <p>It is an error if <i>pos</i> is not a non-negative exact integer.
@@ -176,7 +179,8 @@ procedure writes no bytes to the buffer and returns 0.</p></li>
 <p>
 The <i>get-position</i> procedure returns an
 implementation-defined object representing the current position of
-the input port.
+the input port, which coincides the position
+the next call of <i>read!</i> procedure reads from.
 <li><p>(<i>set-position!</i> <i>pos</i>)</p>
 <p>
 It is an error if <i>pos</i> does not belong to the correct
@@ -205,7 +209,8 @@ bytes that it wrote, as an exact integer.
 <li><p>(<i>get-position</i>)</p>
 <p>
 The <i>get-position</i> procedure returns an exact
-integer representing the current byte position of the output port.
+integer representing the current byte position of the output port,
+which coincides the position the next call of <i>write!</i> procedure writes from.
 <li><p>(<i>set-position!</i> <i>pos</i>)</p>
 <p>
 <i>Pos</i> is a non-negative exact integer.
@@ -233,9 +238,9 @@ characters that it wrote, as an exact integer.
 </p>
 <li><p>(<i>get-position</i>)</p>
 <p>
-The <i>get-position</i> procedure returns an exact
-integer representing the current position of
-the input port.
+The <i>get-position</i> procedure returns an implementation-defined object
+representing the current position of the input port,
+which coincides the position the next call of <i>write!</i> writes from.
 <li><p>(<i>set-position!</i> <i>pos</i>)</p>
 <p>
 <i>Pos</i> is a non-negative exact integer.
