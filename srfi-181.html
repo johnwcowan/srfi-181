@@ -387,7 +387,7 @@ the IANA page on character sets</a>
 may also be recognized and supported.</p>
 <p>If <code>make-codec</code> is called
 on a string that the implementation does not support,
-an error satisfying <code>error-object?</code> is signaled.</p>
+an error satisfying <code>unknown-encoding?</code> is signaled.</p>
 
 <div><code>(latin-1-codec<i></i>)</code></div>
 <div><code>(utf-8-codec<i></i>)</code></div>
@@ -403,7 +403,14 @@ are implementation-dependent.
 A call to any of these procedures returns a value that is equal in the
 sense of <code>eqv?</code> to the result of any other call to the same
 procedure.
-</p>
+
+<div><code>(unknown-encoding?&nbsp;<i>obj</i>)</code></div>
+<p>Returns <code>#t</code> if <i>obj</i> is an condition object
+raised by <code>make-codec</code> or one of a set of implementation-defined
+objects.<p>
+<div><code>(unknown-encoding?&nbsp;<i>unknown-enc-obj</i>)</code></div>
+<p>Extracts the name of the unknown encoding from <i>unknown-enc-obj</i>
+and returns it as a string.  It is an error to mutate this string.</p>
 <h3>End-of-line styles</h3>
 <p>
 An <em>end-of-line style</em> is a symbol that
