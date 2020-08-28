@@ -371,23 +371,19 @@ and whatever other properties it
 requires in order to implement specific rules for
 encoding and decoding.</p>
 <div><code>(make-codec <i>string</i>)</code></div>
-<p>Returns a codec representing
-the character encoding scheme one of whose
-whose names is the case-insensitive string <i>string</i>.</p>
-<p>Some  character encoding names can be found at
-<a href="https://encoding.spec.whatwg.org/#names-and-labels">
-the WHATWG encoding specification</a>, and implementations
-should recognize and support all of these.
-There are a total of 39 encodings, which have between them
-218 standard names.  Note that the "replacement" codec
-signals an error whenever it is used.
-Additional encoding names listed at
-<a href="https://www.iana.org/assignments/character-sets/character-sets.xhtml">
-the IANA page on character sets</a>
-may also be recognized and supported.</p>
+<p>Returns a codec representing the character encoding scheme one of
+whose names matches the string <i>string</i> case-insensitively.</p>
+<p>Some character names, encodings and corresponding algorithms can
+be found at the <a href="https://encoding.spec.whatwg.org/">
+WHATWG encoding specification</a>, and implementations should
+recognize and support all of these that are feasible given space
+constraints.  There are a total of 39 encodings, which have between
+them 218 standard names.  Note that the "replacement" codec signals
+an error whenever it is used.  Additional encodings listed at the
+IANA page on character sets are not recommended.</p>
 <p>If <code>make-codec</code> is called
 on a string that the implementation does not support,
-an error satisfying <code>error-object?</code> is signaled.</p>
+an error satisfying <code>unknown-encoding-error?</code> is signaled.</p>
 
 <div><code>(latin-1-codec<i></i>)</code></div>
 <div><code>(utf-8-codec<i></i>)</code></div>
@@ -403,7 +399,14 @@ are implementation-dependent.
 A call to any of these procedures returns a value that is equal in the
 sense of <code>eqv?</code> to the result of any other call to the same
 procedure.
-</p>
+
+<div><code>(unknown-encoding-error?&nbsp;<i>obj</i>)</code></div>
+<p>Returns <code>#t</code> if <i>obj</i> is an condition object
+raised by <code>make-codec</code> or one of a set of implementation-defined
+objects.<p>
+<div><code>(unknown-encoding-error-name&nbsp;<i>unknown-encoding-obj</i>)</code></div>
+<p>Extracts the name of the unknown encoding from <i>unknown-encoding-obj</i>
+and returns it as a string.  It is an error to mutate this string.</p>
 <h3>End-of-line styles</h3>
 <p>
 An <em>end-of-line style</em> is a symbol that
@@ -415,6 +418,8 @@ a <code>#\newline</code> character,
 a <code>#\return</code> character, and
 an <code>#\return</code> followed by a <code><code>#\newline</code></code>,
 which is known as a <i>CRLF sequence</i>.
+Note that these match the line endings recognized by the R7RS
+<code>read-line</code> procedure even when invoked on a non-transcoding port.
 Implementations may support other line endings as well.</p>
 <p>
 The end-of-line style symbol <code>none</code>
@@ -452,12 +457,12 @@ an appropriate number of bytes are ignored, and decoding
 continues with the following bytes.</p>
 <p>
 If a textual output operation encounters a character it cannot encode,
-an if the error-handling mode is <code>replace</code>, the
+and if the error-handling mode is <code>replace</code>, the
 replacement character is emitted by the transcoder, and encoding
 continues with the next character.
-The replacement character is <code>#\xFFFD</code> for transcoders whose codec
-can encode this character, but is <code>#\?</code> (question mark)
-if it cannot.
+The replacement character is <code>#\xFFFD</code> for transcoders
+that can encode this character, but is <code>#\?</code> (question mark)
+for transcoders that cannot.
 But if the error-handling mode is <code>raise</code>, an
 an error satisfying <code>i/o-encoding-error?</code> is raised,
 and encoding continues with the next character.
@@ -494,7 +499,9 @@ Larceny, Racket, and Vicare, already provides these procedures
 in the <code>(rnrs io ports)</code> library, with the exceptions
 of <code>make-file-error</code>, which will already exist though
 not necessarily be exposed,
-and of <code>make-codec</code>.
+and of <code>make-codec</code>,
+<code>unknown-encoding-error?</code>, and
+<code>unknown-encoding-error-name</code>.
 Therefore, no implementation is provided here, especially since
 a portable implementation is not possible.</p>
 
