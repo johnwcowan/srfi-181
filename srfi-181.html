@@ -108,6 +108,11 @@ on custom ports is unspecified.</p>
 <p>The types of the arguments to the procedures of this section of this SRFI
 are as follows:</p>
 <ul>
+<li><p>The <i>id</i> is an arbitrary object.
+It is meant to be used to help the implementation
+distinguish ports.
+This SRFI does not provide any mechanism to
+retrieve the id from a port.</p></li>
 <li><p>The <i>read!</i> and <i>write!</i> arguments
 are procedures that behave as specified below.
 <li><p>The <i>get-position</i> and <i>set-position!</i>
@@ -447,8 +452,8 @@ errors.</p>
 <p>
 If a textual input operation encounters an invalid or incomplete
 character encoding,
-then if the error-handling mode is <code>replace</code>, the replacement
-is treated as the character <code>#\xFFFD;</code>, or if that character is
+then if the error-handling mode is <code>replace</code>, the erroneous bytes
+are treated as the character <code>#\xFFFD;</code>, or if that character is
 not representable by the implementation or is not permitted in
 strings, then by the character <code>#\?</code> (question mark).
 But if the error-handling mode is <code>raise</code>,
@@ -457,8 +462,8 @@ an appropriate number of bytes are ignored, and decoding
 continues with the following bytes.</p>
 <p>
 If a textual output operation encounters a character it cannot encode,
-and if the error-handling mode is <code>replace</code>, the
-replacement character is emitted by the transcoder, and encoding
+and if the error-handling mode is <code>replace</code>, a
+replacement character is encoded instead, and encoding
 continues with the next character.
 The replacement character is <code>#\xFFFD</code> for transcoders
 that can encode this character, but is <code>#\?</code> (question mark)
@@ -535,7 +540,7 @@ following is derived from Shiro Kawai's README file in the SRFI 192
 implementation:</p>
 
 <p>If the source of characters or bytes (collectively known as
-<i>elements</i>) underlying a custom input port is in itself
+<i>elements</i>) underlying a custom input port is natively
 positionable (either because the source is itself a positionable port or because
 it is a random-access data structure like a list, vector, or string),
 then the custom port can support the SRFI 192 and R6RS procedures
