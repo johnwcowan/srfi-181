@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>SRFI 181: Custom ports (including transcoded ports)</title>
     <link href="/favicon.png" rel="icon" sizes="192x192" type="image/png">
-    <link rel="stylesheet" href="/srfi.css" type="text/css">
+    <link rel="stylesheet" href="https://srfi.schemers.org/srfi.css" type="text/css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
 
@@ -27,6 +27,7 @@
   <li>Draft #6 published: 2020-07-02</li>
   <li>Draft #7 published: 2020-07-08</li>
   <li>Draft #8 published: 2020-08-23</li>
+  <li>Draft #9 published: 2020-08-28</li>
   <li>John Cowan's <a href="https://github.com/johnwcowan/srfi-181">personal
     Git repo for this SRFI</a> for reference while the SRFI is in
     <em>draft</em> status (<a href="https://htmlpreview.github.io/?https://github.com/johnwcowan/srfi-181/blob/master/srfi-181.html">preview</a>)</li>
@@ -34,7 +35,7 @@
 
 <h2>Abstract</h2>
 
-<p>This SRFI is a lightly edited version of parts of
+<p>This SRFI is derived from parts of
 <a href="http://www.r6rs.org/final/html/r6rs-lib/r6rs-lib-Z-H-1.html#node_toc_node_sec_8.2.4">
 library section 8.2.4</a>,
 <a href="http://www.r6rs.org/final/html/r6rs-lib/r6rs-lib-Z-H-9.html#node_sec_8.2.7">
@@ -145,8 +146,8 @@ and <i>bytevector</i> is a bytevector whose length is at least
 from the byte source, and writes those bytes
 into <i>bytevector</i> starting at index <i>start</i>.
 The <i>read!</i> procedure returns an exact integer.  This
-To indicate an end of file, the <i>read!</i>
-integer represents the number of bytes that it has read.
+integer represents the number of bytes that it has read.  To indicate
+an end of file, the <i>read!</i>
 procedure writes no bytes to its bytevector and returns 0.</p>
 <li><p>(<i>get-position</i>)</p>
 <p>
@@ -159,7 +160,7 @@ even supported on the port (see below).</p>
 <p>However, if the object is an exact integer,
 then it is the position measured in bytes,
 which coincides with the position that
-the next call of <i>read!</i> procedure reads from.
+the next call of <i>read!</i> procedure reads from,
 and can be used to compute a new position some
 specified number of bytes away.
 </p>
@@ -191,8 +192,8 @@ or a vector containing characters, at the implementations's option.
 In either case its length is at least <i>start</i>  +  <i>count</i>.
 <p>The <i>read!</i> procedure obtains up to <i>count</i> characters
 from the character source, and writes those characters
-into <i>string-or-char-vector</i> starting at index <i>start</i>;
-it must be prepared to receive either a string or a vector of characters.
+into <i>string-or-char-vector</i> starting at index <i>start</i>.
+It must be prepared to receive either a string or a vector of characters.
 The <i>read!</i> procedure returns an exact integer
 representing the number of characters that it has written.
 To indicate an end of file, the <i>read!</i>
@@ -218,7 +219,7 @@ an arbitrary algorithm represented by the <i>write!</i> procedure.</p>
 <li><p>(<i>write!</i> <i>bytevector</i> <i>start</i> <i>count</i>)</p>
 <p>
 <p>It is an error if the following conditions on the arguments are not met:
-<i>start</i> and <i>count</i> is non-negative exact
+<i>start</i> and <i>count</i> are non-negative exact
 integers,
 and <i>bytevector</i> is a bytevector whose length is at least
 <i>start</i>  +  <i>count</i>.
@@ -239,12 +240,12 @@ even supported on the port (see below).</p>
 <p>However, if the object is an exact integer,
 then it is the position measured in bytes,
 which coincides with the position that
-the next call of <i>read!</i> procedure reads from.
+the next call of <i>write!</i> procedure writes to,
 and can be used to compute a new position some
 specified number of bytes away.
 </p>
 <li><p>(<i>set-position!</i> <i>pos</i>)</p>
-It is implementation-defined what happens if
+  <p>It is implementation-defined what happens if
 <i>pos</i> is neither the return value of a call to <i>port-position</i>
 on <i>port</i>, in which case
 the position is reset to that point,
@@ -263,7 +264,7 @@ an arbitrary algorithm represented by the <i>write!</i> procedure.
 <li><p>(<i>write!</i> <i>string-or-char-vector</i> <i>start</i> <i>count</i>)</p>
 <p>
 <p>It is an error if the following conditions on the arguments are not met:
-<i>start</i> and <i>count</i> is non-negative exact
+<i>start</i> and <i>count</i> are non-negative exact
 integers,
 and <i>string-or-char-vector</i> is either a string
 or a vector containing characters, at the implementations's option.
@@ -278,7 +279,7 @@ characters that it wrote, as an exact integer.
 <p>
 The <i>get-position</i> procedure returns an implementation-defined object
 representing the current position of the input port,
-which coincides with the position the next call of <i>write!</i> writes from.
+which coincides with the position the next call of <i>write!</i> writes to.
 <li><p>(<i>set-position!</i> <i>pos</i>)</p>
 <p>
 <i>Pos</i> is a non-negative exact integer.
@@ -397,8 +398,7 @@ an error satisfying <code>unknown-encoding-error?</code> is signaled.</p>
 These are predefined codecs for the ISO 8859-1, UTF-8,
 and UTF-16 encoding schemes.
 When decoding, the implementation must respect any BOM present, but
-the implementation may assume either endianness if no BOM is present,
-but if no BOM is present, the implementation may assume either endianness.
+the implementation may assume either endianness if no BOM is present.
 When encoding, whether a BOM is output and what endianness is used
 are implementation-dependent.
 A call to any of these procedures returns a value that is equal in the
@@ -406,7 +406,7 @@ sense of <code>eqv?</code> to the result of any other call to the same
 procedure.
 
 <div><code>(unknown-encoding-error?&nbsp;<i>obj</i>)</code></div>
-<p>Returns <code>#t</code> if <i>obj</i> is an condition object
+<p>Returns <code>#t</code> if <i>obj</i> is a condition object
 raised by <code>make-codec</code> or one of a set of implementation-defined
 objects.<p>
 <div><code>(unknown-encoding-error-name&nbsp;<i>unknown-encoding-obj</i>)</code></div>
@@ -421,7 +421,7 @@ In order to conform to this SRFI, implementations must
 support at least three kinds of line endings:
 a <code>#\newline</code> character,
 a <code>#\return</code> character, and
-an <code>#\return</code> followed by a <code><code>#\newline</code></code>,
+a <code>#\return</code> followed by a <code><code>#\newline</code></code>,
 which is known as a <i>CRLF sequence</i>.
 Note that these match the line endings recognized by the R7RS
 <code>read-line</code> procedure even when invoked on a non-transcoding port.
@@ -455,7 +455,7 @@ character encoding,
 then if the error-handling mode is <code>replace</code>, the erroneous bytes
 are treated as the character <code>#\xFFFD;</code>, or if that character is
 not representable by the implementation or is not permitted in
-strings, then by the character <code>#\x003F;</code> (question mark).
+strings, then by the character <code>#\?</code> (question mark).
 But if the error-handling mode is <code>raise</code>,
 an error satisfying <code>i/o-decoding-error?</code> is signaled,
 an appropriate number of bytes are ignored, and decoding
